@@ -1,14 +1,14 @@
 ```
 ╔════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║   ██████╗██╗     ██╗   ██╗████████╗ ██████╗██╗  ██╗       ║
-║  ██╔════╝██║     ██║   ██║╚══██╔══╝██╔════╝██║  ██║       ║
-║  ██║     ██║     ██║   ██║   ██║   ██║     ███████║       ║
-║  ██║     ██║     ██║   ██║   ██║   ██║     ██╔══██║       ║
-║  ╚██████╗███████╗╚██████╔╝   ██║   ╚██████╗██║  ██║       ║
-║   ╚═════╝╚══════╝ ╚═════╝    ╚═╝    ╚═════╝╚═╝  ╚═╝       ║
+║   ██████╗██╗     ██╗   ██╗████████╗ ██████╗██╗  ██╗        ║
+║  ██╔════╝██║     ██║   ██║╚══██╔══╝██╔════╝██║  ██║        ║
+║  ██║     ██║     ██║   ██║   ██║   ██║     ███████║        ║
+║  ██║     ██║     ██║   ██║   ██║   ██║     ██╔══██║        ║
+║  ╚██████╗███████╗╚██████╔╝   ██║   ╚██████╗██║  ██║        ║
+║   ╚═════╝╚══════╝ ╚═════╝    ╚═╝    ╚═════╝╚═╝  ╚═╝        ║
 ║                                                            ║
-║                    Online IDE                             ║
+║                    Online IDE                              ║
 ║                                                            ║
 ╚════════════════════════════════════════════════════════════╝
 ```
@@ -31,11 +31,13 @@ Clutch is an online integrated development environment that enables users to wri
 ## Installation
 
 **Requirements:**
+
 - Node.js v14+
 - npm
 - Judge0 RapidAPI key
 
 **Setup:**
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -64,12 +66,14 @@ Get your Judge0 API key from [RapidAPI](https://rapidapi.com/judge0-official/api
 ## Quick Start
 
 **Start the backend server:**
+
 ```bash
 cd backend
 npm run dev
 ```
 
 **Open the frontend:**
+
 ```bash
 # Open frontend/index.html in your browser
 # Or use a local server like Live Server
@@ -88,17 +92,17 @@ The IDE will be available at `http://localhost:5500` (or your local server port)
 
 ### Supported Languages
 
-| Language   | Version         |
-|------------|-----------------|
-| JavaScript | Node.js 16.x    |
-| TypeScript | 4.x             |
-| Python     | 3.x             |
-| Java       | JDK 11          |
-| C#         | Mono 6.x        |
-| C++        | GCC 9.x         |
-| C          | GCC 9.x         |
-| Go         | 1.x             |
-| Rust       | 1.x             |
+| Language   | Version      |
+| ---------- | ------------ |
+| JavaScript | Node.js 16.x |
+| TypeScript | 4.x          |
+| Python     | 3.x          |
+| Java       | JDK 11       |
+| C#         | Mono 6.x     |
+| C++        | GCC 9.x      |
+| C          | GCC 9.x      |
+| Go         | 1.x          |
+| Rust       | 1.x          |
 
 ### Example: Running C++ Code
 
@@ -117,17 +121,20 @@ Click "Run" and see the output in the Output panel.
 ### Example: Python with Input
 
 **Code:**
+
 ```python
 name = input()
 print(f"Hello, {name}!")
 ```
 
 **Input:**
+
 ```
 World
 ```
 
 **Output:**
+
 ```
 Hello, World!
 ```
@@ -159,6 +166,7 @@ clutch/
 **POST** `/api/execute`
 
 **Request Body:**
+
 ```json
 {
   "language_id": 54,
@@ -168,6 +176,7 @@ clutch/
 ```
 
 **Response:**
+
 ```json
 {
   "stdout": "output here",
@@ -182,6 +191,7 @@ clutch/
 ## Development
 
 **Run backend in development mode:**
+
 ```bash
 cd backend
 npm run dev
@@ -190,6 +200,7 @@ npm run dev
 The server will restart automatically on file changes using nodemon.
 
 **Frontend development:**
+
 - Use any local development server
 - Recommended: VS Code Live Server extension
 - Monaco Editor loads from CDN
@@ -217,11 +228,13 @@ Error: Execution failed
 ## Technologies Used
 
 **Frontend:**
+
 - Monaco Editor - Code editor
 - Vanilla JavaScript - Application logic
 - HTML5/CSS3 - UI structure and styling
 
 **Backend:**
+
 - Node.js - Runtime environment
 - Express - Web framework
 - Axios - HTTP client
