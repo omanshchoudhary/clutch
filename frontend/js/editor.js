@@ -2,7 +2,7 @@ function getCode(){
     return editor.getValue();
 }
 
-function setLanguage(setModelLanguage){
+function setLanguage(lang){
     monaco.editor.setModelLanguage(editor.getModel(), lang)
 }
 

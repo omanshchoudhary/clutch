@@ -28,3 +28,6 @@ Thumbs.db
 dist/
 out/
 build/
+
+#Implementation Plan
+PROJECT_DOCUMENTATION.md
