@@ -25,7 +25,7 @@ function getLanguageId(language) {
     }
 }
 
-async function executeCode(language, code, input) {
+export async function executeCode(language, code, input) {
     const languageId = getLanguageId(language);
     if (!languageId) throw new Error(`Unsupported language: ${language}`);
 

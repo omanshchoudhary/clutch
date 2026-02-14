@@ -1,3 +1,6 @@
+import { saveSession } from "./storage.js";
+import { executeCode } from "./api.js";
+
 const input = document.getElementById("input");
 const output = document.getElementById("output")
 const runButton = document.getElementById("run-button")
@@ -43,21 +46,7 @@ function focusEditor(){
     window.Editor.focus();
 }
 
-function saveState(){
-    const code = window.Editor.getCode();
-    const language=document.getElementById("language").value;
-    const inputValue=input.value;
 
-    const session = {
-        code,
-        language,
-        inputValue,
-        timestamp: Date.now()
-    }
-
-    localStorage.setItem("clutch-session", JSON.stringify(session));
-    console.log("Session saved")
-}
 
 document.addEventListener("keydown", async (event) => {
     const mod = event.ctrlKey || event.metaKey;
@@ -70,7 +59,7 @@ document.addEventListener("keydown", async (event) => {
 
     if(mod && event.key==="s"){
         event.preventDefault();
-        saveState();
+        saveSession();
     }
 
     if(mod && event.key==="l"){
