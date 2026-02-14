@@ -1,4 +1,3 @@
-
 function getLanguageId(language) {
     switch (language.toLowerCase()) {
         case "python":
