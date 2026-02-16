@@ -43,8 +43,26 @@ export async function executeCode(language, code, input) {
 
     const result = await response.json();
 
-    if (result.stderr) return `Error:\n${result.stderr}`;
-    if (result.compile_output) return `Compile Error:\n${result.compile_output}`;
-    return result.stdout;
+    let outputType = "stdout";
+    let text = result.stdout || " ";
+
+    if(result.compile_output){
+        outputType="compile_error";
+        text=result.compile_output
+    } else if(result.stderr){
+        outputType="stderr";
+        text=result.stderr;
+    } else if(!text.trim()){
+        outputType="empty";
+        text="No Output"
+    }
+
+    return {
+        outputType,
+        text,
+        time: result.time ?? null,
+        memory: result.memory,
+        status: result.status?.description ?? "Unknown"
+    };
 
 }   
