@@ -97,6 +97,110 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Tab Bar */
+.tab-bar {
+    display: flex;
+    align-items: center;
+    height: 35px;
+    background-color: #252526;
+    border-bottom: 1px solid #3c3c3c;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-shrink: 0;
+}
+
+.tab-bar::-webkit-scrollbar {
+    height: 3px;
+}
+
+.tab-bar::-webkit-scrollbar-thumb {
+    background: #424242;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    min-width: 120px;
+    max-width: 200px;
+    padding: 0 10px;
+    background-color: #2d2d2d;
+    border-right: 1px solid #1e1e1e;
+    color: #969696;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.tab:hover {
+    background-color: #323233;
+}
+
+.tab.active {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-bottom: 2px solid #0e639c;
+}
+
+.tab-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tab-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    color: #969696;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.tab:hover .tab-close {
+    opacity: 1;
+}
+
+.tab-close:hover {
+    background-color: #4a4a4a;
+    color: #ffffff;
+}
+
+.tab-unsaved {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ce9178;
+    flex-shrink: 0;
+}
+
+.new-file-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 100%;
+    background: none;
+    border: none;
+    color: #969696;
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.new-file-btn:hover {
+    background-color: #323233;
+    color: #ffffff;
+}
+
 .io {
     flex-shrink: 0;
     height: 200px;
