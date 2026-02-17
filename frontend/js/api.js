@@ -29,9 +29,9 @@ export async function executeCode(language, code, input) {
     const languageId = getLanguageId(language);
     if (!languageId) throw new Error(`Unsupported language: ${language}`);
 
-    const response = await fetch("http://localhost:3000/api/execute",{
+    const response = await fetch("http://localhost:3000/api/execute", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             language_id: languageId,
             source_code: code,
@@ -46,15 +46,15 @@ export async function executeCode(language, code, input) {
     let outputType = "stdout";
     let text = result.stdout || " ";
 
-    if(result.compile_output){
-        outputType="compile_error";
-        text=result.compile_output
-    } else if(result.stderr){
-        outputType="stderr";
-        text=result.stderr;
-    } else if(!text.trim()){
-        outputType="empty";
-        text="No Output"
+    if (result.compile_output) {
+        outputType = "compile_error";
+        text = result.compile_output
+    } else if (result.stderr) {
+        outputType = "stderr";
+        text = result.stderr;
+    } else if (!text.trim()) {
+        outputType = "empty";
+        text = "No Output"
     }
 
     return {
