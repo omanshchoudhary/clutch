@@ -1,27 +1,15 @@
 const input = document.getElementById('input')
 
 export function saveSession() {
-    const code = window.Editor.getCode();
-    const language = document.getElementById("language").value;
-    const inputValue = input.value;
-
-    const session = {
-        code,
-        language,
-        inputValue,
-        timestamp: Date.now()
-    }
-
-    localStorage.setItem("clutch-session", JSON.stringify(session));
-    console.log("Session saved")
+    localStorage.setItem("files", JSON.stringify(files));
+    localStorage.setItem("activeFileId", JSON.stringify(activeFileId))
 }
 
 export function loadSession() {
-    const session = JSON.parse(localStorage.getItem("clutch-session")) || {
-        code: "",
-        language: "cpp",
-        inputValue: "",
-        timestamp: Date.now()
+
+    const session = {
+        files: JSON.parse(localStorage.getItem("files")),
+        activeFileId: JSON.parse(localStorage.getItem("activeFileId"))
     }
 
     return session;

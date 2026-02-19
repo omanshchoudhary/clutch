@@ -1,3 +1,5 @@
+import { loadSession, saveSession } from "./storage";
+
 function getLanguageFromExtension(filename) {
     const ext = filename.split(".").pop().toLowerCase();
     const map = {
@@ -31,9 +33,28 @@ function createFileObject(name, language = null, content = '') {
     };
 }
 
-let files = []
-let activeFileId = null
 
+
+// Default Code On Starting
+const defaultCode = `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello World";
+    return 0;
+}`;
+
+const defaultFile = createFileObject('main.cpp', 'cpp', defaultCode);
+
+
+// Setup Files And Editor On Startup
+let files = loadSession().files || [defaultFile];
+let activeFileId = loadSession().activeFileId || defaultFile.id;
+
+
+
+
+// File Operations
 function getActiveFile() {
     return files.find(f => f.id === activeFileId)
 }
@@ -47,6 +68,7 @@ function createFile(name = "Untitiled.cpp") {
     files.push(file)
 
     switchToFile(file.id)
+    saveSession()
     renderTabs();
 }
 
@@ -60,7 +82,7 @@ function deleteFile(id) {
         const newIndex = Math.min(index, files.length - 1);
         switchToFile(files[newIndex].id);
     }
-
+    saveSession();
     renderTabs();
 }
 
@@ -81,7 +103,7 @@ function switchToFile(id) {
 
 
     document.getElementById("language").value = newFile.language;
-
+    saveSession();
     renderTabs();
 }
 
@@ -92,6 +114,57 @@ function renameFile(id, newName) {
         }
         return file
     })
-
+    saveSession();
     renderTabs();
 }
+
+
+
+
+// Render Tabs For Files
+function renderTabs() {
+    const tabBar = document.getElementById('tab-bar');
+    if (!tabBar) return;
+
+    const addBtn = tabBar.querySelector('.new-file-btn');
+    tabBar.innerHTML = '';
+
+    // Create a tab for each file
+    files.forEach(file => {
+        const tab = document.createElement('div');
+        tab.className = `tab ${file.id === activeFileId ? 'active' : ''}`;
+
+        // Tab content: unsaved dot + filename + close button
+        tab.innerHTML = `
+            ${file.isDirty ? '<span class="tab-unsaved"></span>' : ''}
+            <span class="tab-name">${file.name}</span>
+            <span class="tab-close">&times;</span>
+        `;
+
+        // Click on tab (not close button) to switch
+        tab.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('tab-close')) {
+                switchToFile(file.id);
+            }
+        });
+
+        // Click close button to delete
+        tab.querySelector('.tab-close').addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent switching to this tab
+            deleteFile(file.id);
+        });
+
+        tabBar.appendChild(tab);
+    });
+
+    // Add back the "+" button
+    if (addBtn) {
+        tabBar.appendChild(addBtn);
+    }
+}
+
+
+// Add event listener to the add file button
+document.getElementById('new-file-btn')?.addEventListener('click', () => {
+    createFile();
+});

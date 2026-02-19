@@ -1,4 +1,6 @@
 import { loadSession } from "./storage.js"
+import { initializeFiles, switchToFile, getActiveFile } from "./files.js"
+
 const input = document.getElementById('input')
 const languageDropdown = document.getElementById('language')
 
@@ -12,7 +14,10 @@ function setLanguage(lang) {
 
 window.Editor = {
     getCode,
-    setLanguage
+    setLanguage,
+    getValue: () => editor?.getValue() || '',
+    setValue: (val) => editor?.setValue(val),
+    setMonacoLanguage: (lang) => monaco.editor.setModelLanguage(editor.getModel(), lang)
 };
 
 require.config({
@@ -23,15 +28,15 @@ require.config({
 
 let editor;
 
-const session = loadSession();
-input.value = session.inputValue;
-languageDropdown.value = session.language;
-
+// Initialize files first
+initializeFiles();
 
 require(["vs/editor/editor.main"], () => {
+    const activeFile = getActiveFile();
+    
     editor = monaco.editor.create(document.getElementById("editor"), {
-        value: `${session.code}`,
-        language: `${session.language}`,
+        value: activeFile ? activeFile.content : '',
+        language: activeFile ? activeFile.language : 'cpp',
         theme: "vs-dark",
         automaticLayout: true,
         fontSize: 14
