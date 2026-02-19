@@ -1,6 +1,6 @@
 const input = document.getElementById('input')
 
-export function saveSession() {
+export function saveSession(files, activeFileId) {
     localStorage.setItem("files", JSON.stringify(files));
     localStorage.setItem("activeFileId", JSON.stringify(activeFileId))
 }
@@ -15,8 +15,3 @@ export function loadSession() {
     return session;
 }
 
-setInterval(saveSession, 5000);
-
-window.addEventListener("beforeunload", ()=>{
-    saveSession()
-})

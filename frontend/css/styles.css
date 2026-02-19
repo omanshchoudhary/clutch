@@ -299,6 +299,27 @@ body {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+.output-btn {
+    background-color: #3c3c3c;
+    color: #d4d4d4;
+    border: 1px solid #4a4a4a;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.output-btn:hover {
+    background-color: #4a4a4a;
+    border-color: #5a5a5a;
+}
+
+.output-btn:active {
+    background-color: #3c3c3c;
+}
+
 .status-badge {
     display: inline-flex;
     align-items: center;

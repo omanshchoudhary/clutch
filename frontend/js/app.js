@@ -58,3 +58,22 @@ document.getElementById("run-button").addEventListener("click", async () => {
 document.getElementById("language").addEventListener("change", (e) => {
   window.Editor.setLanguage(e.target.value);
 });
+
+// Copy Output button
+document.getElementById("copy-output").addEventListener("click", async () => {
+  const text = output.textContent;
+  if (text && text !== "No output") {
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById("copy-output");
+    btn.textContent = "Copied!";
+    setTimeout(() => btn.textContent = "Copy", 1500);
+  }
+});
+
+// Clear Output button
+document.getElementById("clear-output").addEventListener("click", () => {
+  output.textContent = "";
+  statusBadge.textContent = "Ready";
+  statusBadge.classList.remove("success", "error", "pending");
+  execMeta.textContent = "Time: -s | Memory: - KB";
+});

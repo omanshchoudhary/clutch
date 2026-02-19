@@ -1,4 +1,4 @@
-import { loadSession, saveSession } from "./storage";
+import { loadSession, saveSession } from "./storage.js";
 
 function getLanguageFromExtension(filename) {
     const ext = filename.split(".").pop().toLowerCase();
@@ -55,7 +55,7 @@ let activeFileId = loadSession().activeFileId || defaultFile.id;
 
 
 // File Operations
-function getActiveFile() {
+export function getActiveFile() {
     return files.find(f => f.id === activeFileId)
 }
 
@@ -68,7 +68,7 @@ function createFile(name = "Untitiled.cpp") {
     files.push(file)
 
     switchToFile(file.id)
-    saveSession()
+    saveSession(files, activeFileId)
     renderTabs();
 }
 
@@ -82,11 +82,11 @@ function deleteFile(id) {
         const newIndex = Math.min(index, files.length - 1);
         switchToFile(files[newIndex].id);
     }
-    saveSession();
+    saveSession(files, activeFileId);
     renderTabs();
 }
 
-function switchToFile(id) {
+export function switchToFile(id) {
     const currentFile = getActiveFile()
 
     if (currentFile && window.Editor) {
@@ -103,7 +103,7 @@ function switchToFile(id) {
 
 
     document.getElementById("language").value = newFile.language;
-    saveSession();
+    saveSession(files, activeFileId);
     renderTabs();
 }
 
@@ -114,7 +114,7 @@ function renameFile(id, newName) {
         }
         return file
     })
-    saveSession();
+    saveSession(files, activeFileId);
     renderTabs();
 }
 
@@ -157,7 +157,6 @@ function renderTabs() {
         tabBar.appendChild(tab);
     });
 
-    // Add back the "+" button
     if (addBtn) {
         tabBar.appendChild(addBtn);
     }
@@ -168,3 +167,12 @@ function renderTabs() {
 document.getElementById('new-file-btn')?.addEventListener('click', () => {
     createFile();
 });
+
+
+renderTabs();
+
+setInterval(() => saveSession(files, activeFileId), 5000);
+
+window.addEventListener("beforeunload", () => {
+    saveSession(files, activeFileId)
+})

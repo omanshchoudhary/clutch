@@ -1,5 +1,5 @@
 import { loadSession } from "./storage.js"
-import { initializeFiles, switchToFile, getActiveFile } from "./files.js"
+import { switchToFile, getActiveFile } from "./files.js"
 
 const input = document.getElementById('input')
 const languageDropdown = document.getElementById('language')
@@ -28,8 +28,6 @@ require.config({
 
 let editor;
 
-// Initialize files first
-initializeFiles();
 
 require(["vs/editor/editor.main"], () => {
     const activeFile = getActiveFile();
