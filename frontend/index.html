@@ -34,13 +34,20 @@
             <option value="rust">Rust</option>
           </select>
           <button id="run-button">Run</button>
+          <button id="clear-session" class="clear-session-btn">Clear Session</button>
         </div>
       </div>
 
       <div class="tab-bar" id="tab-bar">
         <button class="new-file-btn" id="new-file-btn">+</button>
       </div>
-      <div id="editor"></div>
+      <div class="editor-shell">
+        <div id="editor-loading" class="editor-loading" role="status" aria-live="polite">
+          <div class="editor-loading-spinner" aria-hidden="true"></div>
+          <p>Loading editor...</p>
+        </div>
+        <div id="editor"></div>
+      </div>
 
       <div class="io">
         <div class="io-panel">

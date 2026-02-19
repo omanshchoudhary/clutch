@@ -48,8 +48,9 @@ const defaultFile = createFileObject('main.cpp', 'cpp', defaultCode);
 
 
 // Setup Files And Editor On Startup
-let files = loadSession().files || [defaultFile];
-let activeFileId = loadSession().activeFileId || defaultFile.id;
+const session = loadSession();
+let files = session?.files || [defaultFile];
+let activeFileId = session?.activeFileId || defaultFile.id;
 
 
 

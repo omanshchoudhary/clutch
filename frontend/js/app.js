@@ -47,7 +47,11 @@ document.getElementById("run-button").addEventListener("click", async () => {
     const result = await executeCode(language, code, input.value);
     renderResult(result);
   } catch (err) {
-    output.textContent = `Error: ${err.message}`;
+    if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Network request failed')) {
+      output.textContent = "Cannot reach server. Check your connection.";
+    } else {
+      output.textContent = `Error: ${err.message}`;
+    }
     statusBadge.classList.remove("pending", "success");
     statusBadge.classList.add("error");
     statusBadge.textContent = "Error";
@@ -76,4 +80,12 @@ document.getElementById("clear-output").addEventListener("click", () => {
   statusBadge.textContent = "Ready";
   statusBadge.classList.remove("success", "error", "pending");
   execMeta.textContent = "Time: -s | Memory: - KB";
+});
+
+// Clear Session button
+document.getElementById("clear-session").addEventListener("click", () => {
+  if (confirm("Clear all files and reset? This cannot be undone.")) {
+    localStorage.clear();
+    location.reload();
+  }
 });

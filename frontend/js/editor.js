@@ -27,7 +27,23 @@ require.config({
 })
 
 let editor;
+const loadingElement = document.getElementById('editor-loading');
 
+function hideEditorLoading() {
+    loadingElement?.classList.add('hidden');
+}
+
+function showEditorLoadError() {
+    if (!loadingElement) return;
+    const text = loadingElement.querySelector('p');
+    loadingElement.classList.remove('hidden');
+    loadingElement.classList.add('error');
+    if (text) text.textContent = 'Failed to load editor. Please refresh the page.';
+}
+
+require.onError = () => {
+    showEditorLoadError();
+}
 
 require(["vs/editor/editor.main"], () => {
     const activeFile = getActiveFile();
@@ -38,5 +54,7 @@ require(["vs/editor/editor.main"], () => {
         theme: "vs-dark",
         automaticLayout: true,
         fontSize: 14
-    })
+    });
+
+    hideEditorLoading();
 })

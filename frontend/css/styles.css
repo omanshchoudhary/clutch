@@ -19,8 +19,77 @@ body {
 }
 
 #editor {
+    position: relative;
     width: 100%;
     flex: 1;
+}
+
+.editor-shell {
+    position: relative;
+    width: 100%;
+    flex: 1;
+}
+
+.editor-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(180deg, #1e1e1e 0%, #202225 100%);
+    color: #d4d4d4;
+    font-size: 13px;
+}
+
+.editor-loading p {
+    animation: loadingPulse 1.4s ease-in-out infinite;
+}
+
+.editor-loading.hidden {
+    display: none;
+}
+
+.editor-loading.error .editor-loading-spinner {
+    display: none;
+}
+
+.editor-loading.error p {
+    color: #f44747;
+}
+
+.editor-loading-spinner {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid rgba(212, 212, 212, 0.25);
+    border-top-color: #0e639c;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loadingPulse {
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .editor-loading-spinner,
+    .editor-loading p {
+        animation: none;
+    }
 }
 
 
