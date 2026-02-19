@@ -64,23 +64,34 @@ function deleteFile(id) {
     renderTabs();
 }
 
-function switchToFile(id){
+function switchToFile(id) {
     const currentFile = getActiveFile()
 
-    if(currentFile && window.Editor){
+    if (currentFile && window.Editor) {
         currentFile.content = window.Editor.getCode();
     }
 
     activeFileId = id;
     const newFile = getActiveFile();
 
-    if(window.Editor){
+    if (window.Editor) {
         window.Editor.setValue(newFile.content);
         window.Editor.setLanguage(newFile.language)
     }
 
 
     document.getElementById("language").value = newFile.language;
+
+    renderTabs();
+}
+
+function renameFile(id, newName) {
+    files = files.map(file => {
+        if (file.id === id) {
+            return { ...file, name: newName, language: getLanguageFromExtension(newName) }
+        }
+        return file
+    })
 
     renderTabs();
 }
