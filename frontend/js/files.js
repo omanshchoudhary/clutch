@@ -1,39 +1,37 @@
 import { loadSession, saveSession } from "./storage.js";
 
 function getLanguageFromExtension(filename) {
-    const ext = filename.split(".").pop().toLowerCase();
-    const map = {
-        'js': 'javascript',
-        'ts': 'typescript',
-        'py': 'python',
-        'java': 'java',
-        'cs': 'csharp',
-        'cpp': 'cpp',
-        'c': 'c',
-        'go': 'go',
-        'rs': 'rust'
-    };
+  const ext = filename.split(".").pop().toLowerCase();
+  const map = {
+    js: "javascript",
+    ts: "typescript",
+    py: "python",
+    java: "java",
+    cs: "csharp",
+    cpp: "cpp",
+    c: "c",
+    go: "go",
+    rs: "rust",
+  };
 
-    return map[ext] || "plaintext"
+  return map[ext] || "plaintext";
 }
 
 function generateId() {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-function createFileObject(name, language = null, content = '') {
-    return {
-        id: generateId(),
-        name: name,
-        language: language || getLanguageFromExtension(name),
-        content: content,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        isDirty: false
-    };
+function createFileObject(name, language = null, content = "") {
+  return {
+    id: generateId(),
+    name: name,
+    language: language || getLanguageFromExtension(name),
+    content: content,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    isDirty: false,
+  };
 }
-
-
 
 // Default Code On Starting
 const defaultCode = `#include <iostream>
@@ -44,136 +42,183 @@ int main() {
     return 0;
 }`;
 
-const defaultFile = createFileObject('main.cpp', 'cpp', defaultCode);
-
+const defaultFile = createFileObject("main.cpp", "cpp", defaultCode);
 
 // Setup Files And Editor On Startup
 const session = loadSession();
 let files = session?.files || [defaultFile];
 let activeFileId = session?.activeFileId || defaultFile.id;
 
-
-
-
 // File Operations
 export function getActiveFile() {
-    return files.find(f => f.id === activeFileId)
+  return files.find((f) => f.id === activeFileId);
 }
 
 function createFile(name = "Untitiled.cpp") {
-    if (files.some(f => f.name === name)) {
-        name = 'Untitled-' + files.length + '.' + name.split('.').pop();
-    }
+  if (files.some((f) => f.name === name)) {
+    name = "Untitled-" + files.length + "." + name.split(".").pop();
+  }
 
-    const file = createFileObject(name);
-    files.push(file)
+  const file = createFileObject(name);
+  files.push(file);
 
-    switchToFile(file.id)
-    saveSession(files, activeFileId)
-    renderTabs();
+  switchToFile(file.id);
+  saveSession(files, activeFileId);
+  renderTabs();
 }
 
 function deleteFile(id) {
-    if (files.length <= 1) return;
+  if (files.length <= 1) return;
 
-    const index = files.findIndex(f => f.id === id);
-    files = files.filter(f => f.id !== id);
+  const index = files.findIndex((f) => f.id === id);
+  files = files.filter((f) => f.id !== id);
 
-    if (activeFileId === id) {
-        const newIndex = Math.min(index, files.length - 1);
-        switchToFile(files[newIndex].id);
-    }
-    saveSession(files, activeFileId);
-    renderTabs();
+  if (activeFileId === id) {
+    const newIndex = Math.min(index, files.length - 1);
+    switchToFile(files[newIndex].id);
+  }
+  saveSession(files, activeFileId);
+  renderTabs();
 }
 
 export function switchToFile(id) {
-    const currentFile = getActiveFile()
+  const currentFile = getActiveFile();
 
-    if (currentFile && window.Editor) {
-        currentFile.content = window.Editor.getCode();
-    }
+  if (currentFile && window.Editor) {
+    currentFile.content = window.Editor.getCode();
+  }
 
-    activeFileId = id;
-    const newFile = getActiveFile();
+  activeFileId = id;
+  const newFile = getActiveFile();
 
-    if (window.Editor) {
-        window.Editor.setValue(newFile.content);
-        window.Editor.setLanguage(newFile.language)
-    }
+  if (window.Editor) {
+    window.Editor.setValue(newFile.content);
+    window.Editor.setLanguage(newFile.language);
+  }
 
-
-    document.getElementById("language").value = newFile.language;
-    saveSession(files, activeFileId);
-    renderTabs();
+  document.getElementById("language").value = newFile.language;
+  saveSession(files, activeFileId);
+  renderTabs();
 }
 
 function renameFile(id, newName) {
-    files = files.map(file => {
-        if (file.id === id) {
-            return { ...file, name: newName, language: getLanguageFromExtension(newName) }
-        }
-        return file
-    })
-    saveSession(files, activeFileId);
-    renderTabs();
+  files = files.map((file) => {
+    if (file.id === id) {
+      return {
+        ...file,
+        name: newName,
+        language: getLanguageFromExtension(newName),
+      };
+    }
+    return file;
+  });
+  saveSession(files, activeFileId);
+  renderTabs();
 }
-
-
-
 
 // Render Tabs For Files
 function renderTabs() {
-    const tabBar = document.getElementById('tab-bar');
-    if (!tabBar) return;
+  const tabBar = document.getElementById("tab-bar");
+  if (!tabBar) return;
 
-    const addBtn = tabBar.querySelector('.new-file-btn');
-    tabBar.innerHTML = '';
+  const addBtn = tabBar.querySelector(".new-file-btn");
+  tabBar.innerHTML = "";
 
-    // Create a tab for each file
-    files.forEach(file => {
-        const tab = document.createElement('div');
-        tab.className = `tab ${file.id === activeFileId ? 'active' : ''}`;
+  // Create a tab for each file
+  files.forEach((file) => {
+    const tab = document.createElement("div");
+    tab.className = `tab ${file.id === activeFileId ? "active" : ""}`;
 
-        // Tab content: unsaved dot + filename + close button
-        tab.innerHTML = `
-            ${file.isDirty ? '<span class="tab-unsaved"></span>' : ''}
+    // Tab content: unsaved dot + filename + close button
+    tab.innerHTML = `
+            ${file.isDirty ? '<span class="tab-unsaved"></span>' : ""}
             <span class="tab-name">${file.name}</span>
             <span class="tab-close">&times;</span>
         `;
 
-        // Click on tab (not close button) to switch
-        tab.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('tab-close')) {
-                switchToFile(file.id);
-            }
-        });
-
-        // Click close button to delete
-        tab.querySelector('.tab-close').addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent switching to this tab
-            deleteFile(file.id);
-        });
-
-        tabBar.appendChild(tab);
+    // Click on tab (not close button) to switch
+    tab.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("tab-close")) {
+        switchToFile(file.id);
+      }
     });
 
-    if (addBtn) {
-        tabBar.appendChild(addBtn);
-    }
+    // Click close button to delete
+    tab.querySelector(".tab-close").addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent switching to this tab
+      deleteFile(file.id);
+    });
+
+    tabBar.appendChild(tab);
+  });
+
+  if (addBtn) {
+    tabBar.appendChild(addBtn);
+  }
 }
 
-
 // Add event listener to the add file button
-document.getElementById('new-file-btn')?.addEventListener('click', () => {
-    createFile();
+document.getElementById("new-file-btn")?.addEventListener("click", () => {
+  createFile();
 });
 
+document.getElementById("export-button")?.addEventListener("click", () => {
+  exportFiles();
+});
 
 renderTabs();
 
 setInterval(() => saveSession(files, activeFileId), 5000);
 
 window.addEventListener("beforeunload", () => {
-    saveSession(files, activeFileId)
-})
+  saveSession(files, activeFileId);
+});
+
+function setExportFeedback(message, isError = false) {
+  const output = document.getElementById("output");
+  const statusBadge = document.getElementById("status-badge");
+
+  if (output) {
+    output.textContent = message;
+  }
+
+  if (statusBadge) {
+    statusBadge.classList.remove("pending", "success", "error");
+    statusBadge.classList.add(isError ? "error" : "success");
+    statusBadge.textContent = isError ? "Export Error" : "Exported";
+  }
+}
+
+// Exporting Files
+export async function exportFiles() {
+  const JSZipConstructor = window.JSZip;
+  if (typeof JSZipConstructor !== "function") {
+    setExportFeedback("Export unavailable: ZIP library failed to load.", true);
+    return;
+  }
+
+  const activeFile = getActiveFile();
+  if (activeFile && window.Editor) {
+    activeFile.content = window.Editor.getCode();
+  }
+
+  try {
+    const zip = new JSZipConstructor();
+
+    files.forEach((file) => {
+      zip.file(file.name, file.content);
+    });
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "project.zip";
+    link.click();
+    setExportFeedback("Export complete: downloaded project.zip");
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (error) {
+    console.error("Export failed:", error);
+    setExportFeedback("Export failed. Please try again.", true);
+  }
+}

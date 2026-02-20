@@ -1,0 +1,146 @@
+:root {
+  /* Dark theme (default) */
+  /* Blues */
+  --color-blue-600: #0e639c;
+  --color-blue-500: #1177bb;
+  --color-blue-400: #1a8ad4;
+  --color-blue-700: #264f78;
+
+  /* Neutrals */
+  --color-neutral-1000: #1e1e1e;
+  --color-neutral-950: #202225;
+  --color-neutral-900: #252526;
+  --color-neutral-875: #252a30;
+  --color-neutral-850: #2a2f35;
+  --color-neutral-800: #2d2d2d;
+  --color-neutral-780: #323233;
+  --color-neutral-700: #383d42;
+  --color-neutral-650: #3c3c3c;
+  --color-neutral-620: #3f444a;
+  --color-neutral-600: #424242;
+  --color-neutral-550: #4a4a4a;
+  --color-neutral-500: #5a5a5a;
+  --color-neutral-450: #6e6e6e;
+  --color-neutral-400: #969696;
+  --color-neutral-300: #aeb7c1;
+  --color-neutral-200: #d4d4d4;
+  --color-neutral-150: #e6e6e6;
+  --color-white: #ffffff;
+
+  /* Greens */
+  --color-green-700: #1f6d3e;
+  --color-green-600: #2f8a54;
+  --color-green-500: #6a9955;
+
+  /* Purples */
+  --color-purple-800: #6a1b9a;
+  --color-purple-700: #7b1fa2;
+  --color-purple-600: #8e24aa;
+  --color-purple-500: #9c27b0;
+
+  /* Warm / warning */
+  --color-amber-700: #8a6714;
+  --color-amber-600: #a27d24;
+  --color-amber-400: #ce9178;
+  --color-amber-100: #fff7de;
+  --color-orange: orange;
+
+  /* Reds */
+  --color-red-700: #9a2f3b;
+  --color-red-600: #bd4653;
+  --color-red-500: #f44747;
+
+  /* Overlays / shadows */
+  --overlay-light-25: rgba(212, 212, 212, 0.25);
+  --overlay-white-4: rgba(255, 255, 255, 0.04);
+  --overlay-black-20: rgba(0, 0, 0, 0.2);
+  --overlay-black-30: rgba(0, 0, 0, 0.3);
+  --overlay-blue-30: rgba(14, 99, 156, 0.3);
+  --overlay-purple-30: rgba(106, 27, 154, 0.3);
+
+  /* Border colors */
+  --border-color: #3c3c3c;
+  --border-light: #4a4a4a;
+
+  /* Text colors */
+  --text-primary: #d4d4d4;
+  --text-secondary: #969696;
+  --text-muted: #6e6e6e;
+
+  /* Decorative surfaces */
+  --surface-glow: rgba(14, 99, 156, 0.12);
+  --surface-sheen: rgba(255, 255, 255, 0.04);
+}
+
+.theme-light {
+  /* Blues */
+  --color-blue-600: #0066b8;
+  --color-blue-500: #0078d4;
+  --color-blue-400: #1a8ad4;
+  --color-blue-700: #add6ff;
+
+  /* Neutrals - clean white UI */
+  --color-neutral-1000: #ffffff;
+  --color-neutral-950: #f7f8fa;
+  --color-neutral-900: #f2f3f5;
+  --color-neutral-875: #e7eaee;
+  --color-neutral-850: #dee2e8;
+  --color-neutral-800: #fbfcfd;
+  --color-neutral-780: #eef1f5;
+  --color-neutral-700: #d6dbe3;
+  --color-neutral-650: #cdd3dc;
+  --color-neutral-620: #c4cad4;
+  --color-neutral-600: #b7beca;
+  --color-neutral-550: #aeb6c4;
+  --color-neutral-500: #9aa3b2;
+  --color-neutral-450: #7b8594;
+  --color-neutral-400: #5f6876;
+  --color-neutral-300: #4a5462;
+  --color-neutral-200: #313844;
+  --color-neutral-150: #1e2430;
+  --color-white: #ffffff;
+
+  /* Greens */
+  --color-green-700: #107c10;
+  --color-green-600: #16c60c;
+  --color-green-500: #2e7d32;
+
+  /* Purples */
+  --color-purple-800: #6f42c1;
+  --color-purple-700: #8558d3;
+  --color-purple-600: #9d6dff;
+  --color-purple-500: #b388ff;
+
+  /* Warm / warning */
+  --color-amber-700: #d18616;
+  --color-amber-600: #e8a317;
+  --color-amber-400: #c57a15;
+  --color-amber-100: #fff4d4;
+  --color-orange: #d18616;
+
+  /* Reds */
+  --color-red-700: #c42b1c;
+  --color-red-600: #e51400;
+  --color-red-500: #d13438;
+
+  /* Overlays / shadows */
+  --overlay-light-25: rgba(31, 41, 55, 0.14);
+  --overlay-white-4: rgba(255, 255, 255, 0.8);
+  --overlay-black-20: rgba(15, 23, 42, 0.12);
+  --overlay-black-30: rgba(15, 23, 42, 0.18);
+  --overlay-blue-30: rgba(0, 102, 184, 0.18);
+  --overlay-purple-30: rgba(111, 66, 193, 0.18);
+
+  /* Border colors - light theme */
+  --border-color: #e1e5ea;
+  --border-light: #d2d8e0;
+
+  /* Text colors - light theme */
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+
+  /* Decorative surfaces */
+  --surface-glow: rgba(0, 102, 184, 0.08);
+  --surface-sheen: rgba(255, 255, 255, 0.5);
+}

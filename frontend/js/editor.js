@@ -47,11 +47,13 @@ require.onError = () => {
 
 require(["vs/editor/editor.main"], () => {
     const activeFile = getActiveFile();
+    const savedTheme = localStorage.getItem('clutch-theme');
+    const monacoTheme = savedTheme === 'light' ? 'vs' : 'vs-dark';
     
     editor = monaco.editor.create(document.getElementById("editor"), {
         value: activeFile ? activeFile.content : '',
         language: activeFile ? activeFile.language : 'cpp',
-        theme: "vs-dark",
+        theme: monacoTheme,
         automaticLayout: true,
         fontSize: 14
     });
