@@ -1,5 +1,7 @@
-import { loadSession } from "./storage.js"
-import { switchToFile, getActiveFile } from "./files.js"
+import { getActiveFile } from "./files.js"
+
+
+const runButton = document.getElementById('run')
 
 const input = document.getElementById('input')
 const languageDropdown = document.getElementById('language')

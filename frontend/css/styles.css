@@ -114,7 +114,26 @@ body::before {
   }
 }
 
-.controls {
+.btn-spinner {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.header button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -127,13 +146,13 @@ body::before {
   box-shadow: 0 1px 0 var(--surface-sheen);
 }
 
-.controls-right {
+.header-right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.controls select {
+.header select {
   background-color: var(--color-neutral-650);
   color: var(--text-primary);
   border: 1px solid var(--border-light);
@@ -147,16 +166,16 @@ body::before {
   box-shadow: inset 0 1px 0 var(--surface-sheen);
 }
 
-.controls select:hover {
+.header select:hover {
   background-color: var(--color-neutral-550);
   border-color: var(--color-neutral-500);
 }
 
-.controls select:focus {
+.header select:focus {
   border-color: var(--color-blue-600);
 }
 
-.controls button {
+.header button {
   background: linear-gradient(135deg, var(--color-blue-600) 0%, var(--color-blue-500) 100%);
   color: var(--color-white);
   border: none;
@@ -170,13 +189,13 @@ body::before {
   box-shadow: 0 2px 4px var(--overlay-black-20);
 }
 
-.controls button:hover {
+.header button:hover {
   background: linear-gradient(135deg, var(--color-blue-500) 0%, var(--color-blue-400) 100%);
   box-shadow: 0 4px 8px var(--overlay-blue-30);
   transform: translateY(-1px);
 }
 
-.controls button:active {
+.header button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px var(--overlay-black-20);
 }
@@ -380,12 +399,14 @@ body::before {
 
 #input::placeholder {
   color: var(--text-muted);
-  font-style: italic;
+  font-style: normal;
+  opacity: 0.85;
 }
 
 #input:focus {
   outline: none;
 }
+
 
 /* Output Styling */
 
@@ -413,6 +434,11 @@ body::before {
 
 .output-compile-error {
   color: var(--color-orange);
+}
+
+.output-empty {
+  color: var(--text-muted);
+  opacity: 0.8;
 }
 
 .output-meta {

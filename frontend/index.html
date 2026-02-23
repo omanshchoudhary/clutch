@@ -15,15 +15,23 @@
 
 <body>
   <div class="app">
-    <div class="controls">
-      <!--Header Section-->
-      <span class="app-name">Clutch</span>
+
+    <!-- Header  -->
+    <div class="header">
+
       <!--Ide Name-->
-      <div class="controls-right">
-        <!--Dropdown and run button-->
+      <span class="app-name">Clutch</span>
+      
+      <div class="header-right">
+
+        <!--Dropdown and Features-->
         <button id="theme-toggle" class="theme-toggle" title="Switch to Light Mode">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
         </button>
+
         <select id="language">
           <option value="javascript">JavaScript</option>
           <option value="typescript">TypeScript</option>
@@ -35,15 +43,22 @@
           <option value="go">Go</option>
           <option value="rust">Rust</option>
         </select>
+
         <button id="run-button">Run</button>
         <button id="export-button" class="export-btn">Export</button>
         <button id="clear-session" class="clear-session-btn">Clear Session</button>
+
       </div>
     </div>
 
+
+    <!-- Tabs Bar -->
     <div class="tab-bar" id="tab-bar">
       <button class="new-file-btn" id="new-file-btn">+</button>
     </div>
+
+
+    <!-- Editor -->
     <div class="editor-shell">
       <div id="editor-loading" class="editor-loading" role="status" aria-live="polite">
         <div class="editor-loading-spinner" aria-hidden="true"></div>
@@ -52,11 +67,17 @@
       <div id="editor"></div>
     </div>
 
+
+    <!-- Input And Output -->
     <div class="io">
+
+      <!-- Input  -->
       <div class="io-panel">
         <div class="io-label">Input</div>
         <textarea id="input" placeholder="Enter your input here..."></textarea>
       </div>
+
+      <!-- Output -->
       <div class="io-panel">
         <div class="io-label">Output</div>
         <div class="output-meta">
@@ -70,6 +91,11 @@
     </div>
   </div>
 
+
+
+
+
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="js/themes.js"></script>
@@ -79,6 +105,7 @@
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/shortcuts.js"></script>
   <script type="module" src="js/storage.js"></script>
+
 </body>
 
 </html>

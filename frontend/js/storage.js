@@ -1,5 +1,7 @@
 const input = document.getElementById('input')
 
+
+// Saving Files In Local Storage With Active File Id
 export function saveSession(files, activeFileId) {
     try {
         localStorage.setItem("files", JSON.stringify(files));
@@ -10,6 +12,7 @@ export function saveSession(files, activeFileId) {
 
 }
 
+// Loading Files From Local Storage With Active File Id
 export function loadSession() {
     try {
         const session = {

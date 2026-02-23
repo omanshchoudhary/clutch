@@ -45,6 +45,7 @@ export async function executeCode(language, code, input) {
 
     let outputType = "stdout";
     let text = result.stdout || " ";
+    const statusDescription = result.status?.description ?? "Unknown";
 
     if (result.compile_output) {
         outputType = "compile_error";
@@ -57,12 +58,17 @@ export async function executeCode(language, code, input) {
         text = "No Output"
     }
 
+    if (statusDescription.toLowerCase().includes("time limit")) {
+        outputType = "timeout";
+        text = "Execution timed out";
+    }
+
     return {
         outputType,
         text,
         time: result.time ?? null,
         memory: result.memory,
-        status: result.status?.description ?? "Unknown"
+        status: statusDescription
     };
 
 }   

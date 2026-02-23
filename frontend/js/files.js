@@ -162,12 +162,15 @@ document.getElementById("new-file-btn")?.addEventListener("click", () => {
   createFile();
 });
 
+
 document.getElementById("export-button")?.addEventListener("click", () => {
   exportFiles();
 });
 
 renderTabs();
 
+
+// Save Session Every 5 Seconds
 setInterval(() => saveSession(files, activeFileId), 5000);
 
 window.addEventListener("beforeunload", () => {
@@ -188,6 +191,8 @@ function setExportFeedback(message, isError = false) {
     statusBadge.textContent = isError ? "Export Error" : "Exported";
   }
 }
+
+
 
 // Exporting Files
 export async function exportFiles() {
