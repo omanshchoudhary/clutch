@@ -1,6 +1,7 @@
 import {
   closeOthers,
   createFile,
+  createFolder,
   deleteFile,
   duplicateFile,
   getFiles,
@@ -127,4 +128,17 @@ export function bindTopActions(onRefresh, onExport, switchToFile) {
   document.getElementById("export-button")?.addEventListener("click", () => {
     onExport();
   });
+}
+
+export function bindSideBarActions(switchToFile){
+  document.getElementById("sidebar-new-file")?.addEventListener("click",()=>{
+    const name = prompt("Enter your name:");
+    const created = createFile(name);
+    switchToFile(created.id);
+  })
+
+  document.getElementById("sidebar-new-folder")?.addEventListener("click",()=>{
+    const name = prompt("Enter your folder name:");
+    const created = createFolder(name);
+  })
 }

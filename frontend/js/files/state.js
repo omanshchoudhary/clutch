@@ -1,5 +1,5 @@
 import { loadSession, saveSession } from "../storage.js";
-import { createFileObject, getLanguageFromExtension } from "./helpers.js";
+import { createFileObject, getLanguageFromExtension, createFolderObject } from "./helpers.js";
 
 const defaultCode = `#include <iostream>
 using namespace std;
@@ -13,6 +13,7 @@ const defaultFile = createFileObject("main.cpp", "cpp", defaultCode);
 const session = loadSession();
 
 let files = Array.isArray(session?.files) && session.files.length > 0 ? session.files : [defaultFile];
+files = migrateFiles(files);
 let activeFileId = session?.activeFileId || files[0].id;
 
 if (!files.some((file) => file.id === activeFileId)) {
@@ -28,7 +29,7 @@ export function getActiveFileId() {
 }
 
 export function persistSession() {
-  saveSession(files, activeFileId);
+  saveSession(files, activeFileId, folders);
 }
 
 export function getActiveFile() {
@@ -92,4 +93,80 @@ export function duplicateFile(id) {
 export function closeOthers(keepId) {
   files = files.filter((file) => file.id === keepId);
   activeFileId = keepId;
+}
+
+
+// Sanitizing Files Data
+function migrateFiles(files){
+  if(!Array.isArray(files)) return [];
+
+  return files.map(file =>({
+    ...file,
+    folderId: file.folderId ?? null
+  }))
+}
+
+// Folders
+
+let folders = session?.folders || []
+folders= migrateFolders(folders)
+
+
+// Sanitizing Folders Data
+function migrateFolders(folders){
+  if(!Array.isArray(folders)) return [];
+
+  return folders.map(folder =>({
+    ...folder,
+    parentId: folder.parentId ?? null
+  }))
+}
+
+
+export function getFolders(){
+  return folders
+}
+
+export function renameFolder(id, newName) {
+  folders = folders.map((folder) => {
+    if (folder.id !== id) return folder;
+    return {
+      ...folder,
+      name: newName,
+    };
+  });
+}
+
+export function deleteFolder(id) {
+
+  files=files.map(file => {
+    if(file.folderId !== id) return file;
+    return {
+      ...file,
+      folderId: null
+    }
+  })
+
+  folders = folders.filter((folder) => folder.id !== id);
+}
+
+export function setFileFolder(fileId, folderId){
+  files=files.map(file =>{
+    if(file.id !== fileId) return file;
+    return {
+      ...file,
+      folderId
+    }
+  })
+}
+export function createFolder(name = "New Folder") {
+  let nextName = name;
+
+  if (folders.some((folder) => folder.name === nextName)) {
+    nextName = "New Folder-" + folders.length + "." + nextName.split(".").pop();
+  }
+
+  const folder = createFolderObject(nextName);
+  folders.push(folder);
+  return folder;
 }

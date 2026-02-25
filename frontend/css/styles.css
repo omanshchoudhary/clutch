@@ -59,6 +59,7 @@ body::before {
   height: 32px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 10px;
   font-size: 10px;
   font-weight: 700;
@@ -67,6 +68,51 @@ body::before {
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-color);
   box-shadow: inset 0 -1px 0 var(--overlay-white-4);
+}
+
+.sidebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sidebar-action-btn {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.sidebar-action-btn svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+
+.sidebar-action-btn:hover {
+  background-color: var(--color-neutral-800);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.sidebar-action-btn:active {
+  background-color: var(--color-neutral-780);
+}
+
+.sidebar-action-btn:focus-visible {
+  outline: none;
+  border-color: var(--color-blue-500);
+  box-shadow: 0 0 0 2px var(--overlay-blue-30);
 }
 
 .sidebar-tree {

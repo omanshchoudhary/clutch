@@ -62,7 +62,11 @@ if (!monacoLoader) {
         language: activeFile ? activeFile.language : 'cpp',
         theme: monacoTheme,
         automaticLayout: true,
-        fontSize: 14
+        fontSize: 14,
+        lineHeight: 22,
+        padding: { top: 12, bottom: 12 },
+        scrollBeyondLastLine: false,
+        cursorSmoothCaretAnimation: "on"
     });
 
     hideEditorLoading();

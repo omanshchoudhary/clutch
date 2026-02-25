@@ -1,7 +1,7 @@
 import { saveSession } from "./storage.js";
-import { bindSidebarInteractions, bindTabInteractions, bindTopActions } from "./files/events.js";
+import { bindSideBarActions, bindSidebarInteractions, bindTabInteractions, bindTopActions } from "./files/events.js";
 import { exportFiles as exportAllFiles } from "./files/exporter.js";
-import { deleteFile, getActiveFile, getActiveFileId, getFiles, persistSession, setActiveFileId } from "./files/state.js";
+import { deleteFile, getActiveFile, getActiveFileId, getFiles, getFolders, persistSession, setActiveFileId } from "./files/state.js";
 import { renderSidebar, renderTabs } from "./files/render.js";
 
 function refreshViews() {
@@ -59,17 +59,17 @@ bindTabInteractions(
 );
 
 bindSidebarInteractions(switchToFile);
-
+bindSideBarActions(switchToFile);
 refreshViews();
 
 setInterval(() => {
   if (window.__skipSessionSave) return;
-  saveSession(getFiles(), getActiveFileId());
+  saveSession(getFiles(), getActiveFileId(), getFolders());
 }, 10000);
 
 window.addEventListener("beforeunload", () => {
   if (window.__skipSessionSave) return;
-  saveSession(getFiles(), getActiveFileId());
+  saveSession(getFiles(), getActiveFileId(), getFolders());
 });
 
 export { getActiveFile };

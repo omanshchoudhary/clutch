@@ -36,7 +36,7 @@ function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-export function createFileObject(name, language = null, content = "") {
+export function createFileObject(name, language = null, content = "", folderId=null) {
   return {
     id: generateId(),
     name,
@@ -45,5 +45,14 @@ export function createFileObject(name, language = null, content = "") {
     createdAt: Date.now(),
     updatedAt: Date.now(),
     isDirty: false,
+    folderId
   };
+}
+
+export function createFolderObject(name, parentId=null){
+  return {
+    id: generateId(),
+    name,
+    parentId
+  }
 }
