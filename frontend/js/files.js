@@ -1,5 +1,7 @@
 import { loadSession, saveSession } from "./storage.js";
 
+
+// Find Language From Name
 function getLanguageFromExtension(filename) {
   const ext = filename.split(".").pop().toLowerCase();
   const map = {
@@ -17,6 +19,8 @@ function getLanguageFromExtension(filename) {
   return map[ext] || "plaintext";
 }
 
+
+// Get File Icon
 function getFileIcon(filename) {
   const ext = filename.split(".").pop().toLowerCase();
   const iconMap = {
@@ -34,6 +38,8 @@ function getFileIcon(filename) {
   return iconMap[ext] || { glyph: "TXT", cls: "file-icon-default" };
 }
 
+
+// Generate File ID
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
@@ -82,6 +88,7 @@ function createFile(name = "Untitiled.cpp") {
   switchToFile(file.id);
   saveSession(files, activeFileId);
   renderTabs();
+  renderSideBar()
 }
 
 function deleteFile(id) {
@@ -96,6 +103,7 @@ function deleteFile(id) {
   }
   saveSession(files, activeFileId);
   renderTabs();
+  renderSideBar()
 }
 
 export function switchToFile(id) {
@@ -116,6 +124,7 @@ export function switchToFile(id) {
   document.getElementById("language").value = newFile.language;
   saveSession(files, activeFileId);
   renderTabs();
+  renderSideBar()
 }
 
 function renameFile(id, newName) {
@@ -131,6 +140,7 @@ function renameFile(id, newName) {
   });
   saveSession(files, activeFileId);
   renderTabs();
+  renderSideBar()
 }
 
 // Render Tabs For Files
@@ -180,7 +190,7 @@ document.getElementById("export-button")?.addEventListener("click", () => {
 });
 
 renderTabs();
-
+renderSideBar()
 // Save Session Every 5 Seconds
 setInterval(() => {
   if (window.__skipSessionSave) return;
@@ -340,12 +350,12 @@ document.addEventListener("click", () => {
 
 // Event Delegation: Listen for double-clicks on the tab bar
 
-tabBar?.addEventListener("dblclick", (e)=>{
+tabBar?.addEventListener("dblclick", (e) => {
   const tab = e.target.closest('.tab');
   if (!tab) return;
 
   const tabName = tab.querySelector(".tab-name")?.textContent;
-  const file = files.find((f)=> f.name===tabName);
+  const file = files.find((f) => f.name === tabName);
   if (!file) return;
 
   if (clickTimer) {
@@ -353,7 +363,7 @@ tabBar?.addEventListener("dblclick", (e)=>{
     clickTimer = null;
   }
 
-  const newName=prompt("Enter new file name:");
+  const newName = prompt("Enter new file name:");
   if (newName && newName.trim()) {
     renameFile(file.id, newName.trim());
   }
@@ -362,5 +372,21 @@ tabBar?.addEventListener("dblclick", (e)=>{
 
 
 
+// Render Files In Sidebar
 
+function renderSideBar() {
+  const fileTree = document.getElementById("sidebar-tree");
+  if (!fileTree) return;
+  fileTree.innerHTML = "";
+  files.forEach((file) => {
+      const icon = getFileIcon(file.name);
+      const isActive = file.id === activeFileId ? " is-active" : "";
+      fileTree.innerHTML += `
+        <button class="tree-item tree-file${isActive}" data-file-id="${file.id}" type="button">
+          <span class="tree-item-icon file-icon ${icon.cls}">${icon.glyph}</span>
+          <span class="tree-item-name">${file.name}</span>
+        </button>
+      `;
+    });
+}
 
