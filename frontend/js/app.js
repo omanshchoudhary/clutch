@@ -108,7 +108,9 @@ document.getElementById("clear-output").addEventListener("click", () => {
 // Clear Session button
 document.getElementById("clear-session").addEventListener("click", () => {
   if (confirm("Clear all files and reset? This cannot be undone.")) {
-    localStorage.clear();
+    window.__skipSessionSave = true;
+    localStorage.removeItem("files");
+    localStorage.removeItem("activeFileId");
     location.reload();
   }
 });

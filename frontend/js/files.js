@@ -178,7 +178,8 @@ function renderTabs() {
 
 // Add event listener to the add file button
 document.getElementById("new-file-btn")?.addEventListener("click", () => {
-  createFile();
+  let name = prompt("Enter your name:");
+  createFile(name);
 });
 
 
@@ -190,9 +191,13 @@ renderTabs();
 
 
 // Save Session Every 5 Seconds
-setInterval(() => saveSession(files, activeFileId), 5000);
+setInterval(() => {
+  if (window.__skipSessionSave) return;
+  saveSession(files, activeFileId);
+}, 10000);
 
 window.addEventListener("beforeunload", () => {
+  if (window.__skipSessionSave) return;
   saveSession(files, activeFileId);
 });
 
@@ -210,6 +215,27 @@ function setExportFeedback(message, isError = false) {
     statusBadge.textContent = isError ? "Export Error" : "Exported";
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
