@@ -22,12 +22,6 @@ window.Editor = {
     setMonacoLanguage: (lang) => monaco.editor.setModelLanguage(editor.getModel(), lang)
 };
 
-require.config({
-    paths: {
-        vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
-    }
-})
-
 let editor;
 const loadingElement = document.getElementById('editor-loading');
 
@@ -43,11 +37,22 @@ function showEditorLoadError() {
     if (text) text.textContent = 'Failed to load editor. Please refresh the page.';
 }
 
-require.onError = () => {
-    showEditorLoadError();
-}
+const monacoLoader = window.require;
 
-require(["vs/editor/editor.main"], () => {
+if (!monacoLoader) {
+    showEditorLoadError();
+} else {
+    monacoLoader.config({
+        paths: {
+            vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+        }
+    });
+
+    monacoLoader.onError = () => {
+        showEditorLoadError();
+    }
+
+    monacoLoader(["vs/editor/editor.main"], () => {
     const activeFile = getActiveFile();
     const savedTheme = localStorage.getItem('clutch-theme');
     const monacoTheme = savedTheme === 'light' ? 'vs' : 'vs-dark';
@@ -61,4 +66,5 @@ require(["vs/editor/editor.main"], () => {
     });
 
     hideEditorLoading();
-})
+    })
+}

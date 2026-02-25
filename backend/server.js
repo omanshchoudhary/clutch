@@ -10,7 +10,31 @@ const app = express();
 
 // Env Imports
 const PORT = process.env.PORT || 3000;
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'http://localhost:5501';
+const configuredOrigins = (
+  process.env.ALLOWED_ORIGINS ||
+  process.env.ALLOWED_ORIGIN ||
+  'http://localhost:5501,http://127.0.0.1:5501'
+)
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const ALLOWED_ORIGINS = [...new Set(
+  configuredOrigins.flatMap((origin) => {
+    try {
+      const parsed = new URL(origin);
+      if (parsed.hostname === 'localhost') {
+        return [origin, `${parsed.protocol}//127.0.0.1${parsed.port ? `:${parsed.port}` : ''}`];
+      }
+      if (parsed.hostname === '127.0.0.1') {
+        return [origin, `${parsed.protocol}//localhost${parsed.port ? `:${parsed.port}` : ''}`];
+      }
+    } catch (_err) {
+      
+    }
+    return [origin];
+  })
+)];
 const ALLOWED_LANGUAGE_IDS = new Set([50, 51, 54, 60, 62, 63, 71, 73, 74]);
 
 
@@ -24,8 +48,11 @@ app.use(
   cors({
     origin(origin, cb) {
       if (!origin) return cb(null, true);
-      if (origin === ALLOWED_ORIGIN) return cb(null, true);
-      return cb(new Error('CORS: origin not allowed'))
+      if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+      const err = new Error('CORS: origin not allowed');
+      err.status = 403;
+      err.isCors = true;
+      return cb(err);
     }
   })
 )
@@ -111,5 +138,13 @@ app.post('/api/execute', executeLimiter, validateExecuteRequest, async (req, res
   }
 })
 
+app.use((err, req, res, next) => {
+  if (err?.isCors || err?.message === 'CORS: origin not allowed') {
+    return res.status(err.status || 403).json({ error: 'CORS: origin not allowed' });
+  }
+
+  console.error('Unhandled server error:', err?.message || err);
+  return res.status(err?.status || 500).json({ error: 'Internal server error' });
+});
 
 app.listen(PORT, () => console.log(`Server started at port:${PORT}`))

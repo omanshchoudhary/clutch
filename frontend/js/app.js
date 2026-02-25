@@ -17,10 +17,16 @@ export function renderResult(result) {
   output.classList.remove("output-empty");
   statusBadge.classList.remove("pending", "success", "error");
 
-  if (result.outputType === "stderr") {
+  if (result.outputType === "empty") {
+    output.classList.add("output-empty");
+    statusBadge.classList.add("success");
+  } else if (result.outputType === "stderr") {
     output.classList.add("output-stderr");
     statusBadge.classList.add("error");
-  } else if (result.outputType === "compile_error" || result.outputType === "timeout") {
+  } else if (
+    result.outputType === "compile_error" ||
+    result.outputType === "timeout"
+  ) {
     output.classList.add("output-compile-error");
     statusBadge.classList.add("error");
   } else {
@@ -82,7 +88,7 @@ document.getElementById("language").addEventListener("change", (e) => {
 // Copy Output button
 document.getElementById("copy-output").addEventListener("click", async () => {
   const text = output.textContent;
-  if (text && text !== "No output") {
+  if (text && text.toLowerCase() !== "no output") {
     await navigator.clipboard.writeText(text);
     const btn = document.getElementById("copy-output");
     btn.textContent = "Copied!";

@@ -42,6 +42,7 @@ body::before {
   position: relative;
   width: 100%;
   flex: 1;
+  height: 100%;
   background-color: var(--color-neutral-1000);
 }
 
@@ -49,6 +50,8 @@ body::before {
   position: relative;
   width: 100%;
   flex: 1;
+  min-height: 0;
+  display: flex;
   background-color: var(--color-neutral-1000);
 }
 
