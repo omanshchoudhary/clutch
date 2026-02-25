@@ -25,6 +25,7 @@
       <div class="header-right">
 
         <!--Dropdown and Features-->
+        <button id="sidebar-toggle" class="sidebar-toggle" title="Toggle Sidebar">Explorer</button>
         <button id="theme-toggle" class="theme-toggle" title="Switch to Light Mode">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -58,14 +59,28 @@
     </div>
 
 
-    <!-- Editor -->
-    <div class="editor-shell">
-      <div id="editor-loading" class="editor-loading" role="status" aria-live="polite">
-        <div class="editor-loading-spinner" aria-hidden="true"></div>
-        <p>Loading editor...</p>
+    <div class="workspace">
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">Explorer</div>
+        <div id="sidebar-tree" class="sidebar-tree">
+          <div class="sidebar-empty">No files listed yet</div>
+        </div>
+      </aside>
+
+      <!-- Editor -->
+      <div class="editor-shell">
+        <div id="editor-loading" class="editor-loading" role="status" aria-live="polite">
+          <div class="editor-loading-spinner" aria-hidden="true"></div>
+          <p>Loading editor...</p>
+        </div>
+        <div id="editor"></div>
       </div>
-      <div id="editor"></div>
+
+
+
     </div>
+
+
 
 
     <!-- Input And Output -->

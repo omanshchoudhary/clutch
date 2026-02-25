@@ -7,6 +7,8 @@ const output = document.getElementById("output");
 const statusBadge = document.getElementById("status-badge");
 const execMeta = document.getElementById("exec-meta");
 const runButton = document.getElementById("run-button");
+const appContainer = document.querySelector(".app");
+const sidebarToggleBtn = document.getElementById("sidebar-toggle");
 
 export function renderResult(result) {
   output.classList.remove(
@@ -113,4 +115,8 @@ document.getElementById("clear-session").addEventListener("click", () => {
     localStorage.removeItem("activeFileId");
     location.reload();
   }
+});
+
+sidebarToggleBtn?.addEventListener("click", () => {
+  appContainer?.classList.toggle("sidebar-collapsed");
 });
