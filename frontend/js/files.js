@@ -144,7 +144,7 @@ function renderTabs() {
   // Create a tab for each file
   files.forEach((file) => {
     const tab = document.createElement("div");
-    tab.className = `tab ${file.id === activeFileId ? "active" : ""}`;
+    tab.className = `tab  ${file.id === activeFileId ? "active" : ""}`;
     const icon = getFileIcon(file.name);
 
     // Tab content: unsaved dot + filename + close button
@@ -182,13 +182,11 @@ document.getElementById("new-file-btn")?.addEventListener("click", () => {
   createFile(name);
 });
 
-
 document.getElementById("export-button")?.addEventListener("click", () => {
   exportFiles();
 });
 
 renderTabs();
-
 
 // Save Session Every 5 Seconds
 setInterval(() => {
@@ -215,29 +213,6 @@ function setExportFeedback(message, isError = false) {
     statusBadge.textContent = isError ? "Export Error" : "Exported";
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Exporting Files
 export async function exportFiles() {
@@ -272,3 +247,73 @@ export async function exportFiles() {
     setExportFeedback("Export failed. Please try again.", true);
   }
 }
+
+// Tabs Context Menu (event delegation on tab-bar)
+
+const tabBar = document.getElementById("tab-bar");
+const menu = document.getElementById("context-menu");
+let contextFileId = null; 
+
+function showContextMenu(x, y) {
+  menu.style.left = x + "px";
+  menu.style.top = y + "px";
+  menu.classList.remove("hidden");
+}
+
+tabBar.addEventListener("contextmenu", (e) => {
+
+  const tab = e.target.closest(".tab");
+  if (!tab) return;
+
+  e.preventDefault();
+
+ 
+  const tabName = tab.querySelector(".tab-name")?.textContent;
+  const file = files.find((f) => f.name === tabName);
+  contextFileId = file ? file.id : null;
+
+  showContextMenu(e.pageX, e.pageY);
+});
+
+menu.addEventListener("click", (e) => {
+  const action = e.target.dataset.action;
+
+  if (action === "rename" && contextFileId) {
+    const newName = prompt("Enter new file name:");
+    if (newName && newName.trim()) {
+      renameFile(contextFileId, newName.trim());
+    }
+  }
+
+  if (action === "duplicate" && contextFileId) {
+    const original = files.find((f) => f.id === contextFileId);
+    if (original) {
+      const copy = createFileObject(
+        "Copy of " + original.name,
+        original.language,
+        original.content,
+      );
+      files.push(copy);
+      switchToFile(copy.id);
+      saveSession(files, activeFileId);
+      renderTabs();
+    }
+  }
+
+  if (action === "close" && contextFileId) {
+    deleteFile(contextFileId);
+  }
+
+  if (action === "close-others" && contextFileId) {
+    const keep = contextFileId;
+    [...files].forEach((f) => {
+      if (f.id !== keep) deleteFile(f.id);
+    });
+  }
+
+  menu.classList.add("hidden");
+});
+
+document.addEventListener("click", () => {
+  menu.classList.add("hidden");
+});
