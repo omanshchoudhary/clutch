@@ -155,13 +155,6 @@ function renderTabs() {
             <span class="tab-close">&times;</span>
         `;
 
-    // Click on tab (not close button) to switch
-    tab.addEventListener("click", (e) => {
-      if (!e.target.classList.contains("tab-close")) {
-        switchToFile(file.id);
-      }
-    });
-
     // Click close button to delete
     tab.querySelector(".tab-close").addEventListener("click", (e) => {
       e.stopPropagation(); // Prevent switching to this tab
@@ -252,7 +245,9 @@ export async function exportFiles() {
 
 const tabBar = document.getElementById("tab-bar");
 const menu = document.getElementById("context-menu");
-let contextFileId = null; 
+let contextFileId = null;
+let clickTimer = null;
+const clickDelayMs = 250;
 
 function showContextMenu(x, y) {
   menu.style.left = x + "px";
@@ -260,14 +255,16 @@ function showContextMenu(x, y) {
   menu.classList.remove("hidden");
 }
 
-tabBar.addEventListener("contextmenu", (e) => {
+
+// Event Delegation: Listen for right-clicks on the tab bar
+tabBar?.addEventListener("contextmenu", (e) => {
 
   const tab = e.target.closest(".tab");
   if (!tab) return;
 
   e.preventDefault();
 
- 
+
   const tabName = tab.querySelector(".tab-name")?.textContent;
   const file = files.find((f) => f.name === tabName);
   contextFileId = file ? file.id : null;
@@ -275,7 +272,26 @@ tabBar.addEventListener("contextmenu", (e) => {
   showContextMenu(e.pageX, e.pageY);
 });
 
-menu.addEventListener("click", (e) => {
+tabBar?.addEventListener("click", (e) => {
+  const tab = e.target.closest(".tab");
+  if (!tab || e.target.classList.contains("tab-close")) return;
+
+  const tabName = tab.querySelector(".tab-name")?.textContent;
+  const file = files.find((f) => f.name === tabName);
+  if (!file) return;
+
+  if (clickTimer) {
+    clearTimeout(clickTimer);
+    clickTimer = null;
+  }
+
+  clickTimer = setTimeout(() => {
+    switchToFile(file.id);
+    clickTimer = null;
+  }, clickDelayMs);
+});
+
+menu?.addEventListener("click", (e) => {
   const action = e.target.dataset.action;
 
   if (action === "rename" && contextFileId) {
@@ -317,3 +333,34 @@ menu.addEventListener("click", (e) => {
 document.addEventListener("click", () => {
   menu.classList.add("hidden");
 });
+
+
+
+
+
+// Event Delegation: Listen for double-clicks on the tab bar
+
+tabBar?.addEventListener("dblclick", (e)=>{
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+
+  const tabName = tab.querySelector(".tab-name")?.textContent;
+  const file = files.find((f)=> f.name===tabName);
+  if (!file) return;
+
+  if (clickTimer) {
+    clearTimeout(clickTimer);
+    clickTimer = null;
+  }
+
+  const newName=prompt("Enter new file name:");
+  if (newName && newName.trim()) {
+    renameFile(file.id, newName.trim());
+  }
+
+})
+
+
+
+
+
