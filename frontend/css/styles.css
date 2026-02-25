@@ -448,7 +448,7 @@ body::before {
 
 .file-icon {
   min-width: 24px;
-  height: 16px;
+  height: 17px;
   padding: 0 4px;
   border-radius: 4px;
   font-size: 9px;
@@ -459,48 +459,50 @@ body::before {
   justify-content: center;
   color: var(--color-white);
   flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.18);
 }
 
 .file-icon-js {
-  background-color: #d7ba7d;
-  color: #1e1e1e;
+  background-color: #f7df1e !important;
+  color: #1a1a1a !important;
 }
 
 .file-icon-ts {
-  background-color: #3178c6;
+  background-color: #3178c6 !important;
 }
 
 .file-icon-py {
-  background-color: #4b8bbe;
+  background-color: #3776ab !important;
 }
 
 .file-icon-java {
-  background-color: #e76f00;
+  background-color: #e76f00 !important;
 }
 
 .file-icon-cs {
-  background-color: #6a4fb3;
+  background-color: #7a3fe0 !important;
 }
 
 .file-icon-cpp {
-  background-color: #00599c;
+  background-color: #00599c !important;
 }
 
 .file-icon-c {
-  background-color: #3a7ca5;
+  background-color: #2a7fb8 !important;
 }
 
 .file-icon-go {
-  background-color: #00add8;
-  color: #102027;
+  background-color: #00add8 !important;
+  color: #062b33 !important;
 }
 
 .file-icon-rs {
-  background-color: #b7410e;
+  background-color: #d35400 !important;
 }
 
 .file-icon-default {
-  background-color: var(--color-neutral-550);
+  background-color: #6b7280 !important;
 }
 
 .tab-close {
