@@ -17,6 +17,23 @@ function getLanguageFromExtension(filename) {
   return map[ext] || "plaintext";
 }
 
+function getFileIcon(filename) {
+  const ext = filename.split(".").pop().toLowerCase();
+  const iconMap = {
+    js: { glyph: "JS", cls: "file-icon-js" },
+    ts: { glyph: "TS", cls: "file-icon-ts" },
+    py: { glyph: "PY", cls: "file-icon-py" },
+    java: { glyph: "J", cls: "file-icon-java" },
+    cs: { glyph: "C#", cls: "file-icon-cs" },
+    cpp: { glyph: "C++", cls: "file-icon-cpp" },
+    c: { glyph: "C", cls: "file-icon-c" },
+    go: { glyph: "GO", cls: "file-icon-go" },
+    rs: { glyph: "RS", cls: "file-icon-rs" },
+  };
+
+  return iconMap[ext] || { glyph: "TXT", cls: "file-icon-default" };
+}
+
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
@@ -128,10 +145,12 @@ function renderTabs() {
   files.forEach((file) => {
     const tab = document.createElement("div");
     tab.className = `tab ${file.id === activeFileId ? "active" : ""}`;
+    const icon = getFileIcon(file.name);
 
     // Tab content: unsaved dot + filename + close button
     tab.innerHTML = `
             ${file.isDirty ? '<span class="tab-unsaved"></span>' : ""}
+            <span class="file-icon ${icon.cls}">${icon.glyph}</span>
             <span class="tab-name">${file.name}</span>
             <span class="tab-close">&times;</span>
         `;

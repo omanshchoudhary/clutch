@@ -296,6 +296,63 @@ body::before {
   white-space: nowrap;
 }
 
+.file-icon {
+  min-width: 24px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+  flex-shrink: 0;
+}
+
+.file-icon-js {
+  background-color: #d7ba7d;
+  color: #1e1e1e;
+}
+
+.file-icon-ts {
+  background-color: #3178c6;
+}
+
+.file-icon-py {
+  background-color: #4b8bbe;
+}
+
+.file-icon-java {
+  background-color: #e76f00;
+}
+
+.file-icon-cs {
+  background-color: #6a4fb3;
+}
+
+.file-icon-cpp {
+  background-color: #00599c;
+}
+
+.file-icon-c {
+  background-color: #3a7ca5;
+}
+
+.file-icon-go {
+  background-color: #00add8;
+  color: #102027;
+}
+
+.file-icon-rs {
+  background-color: #b7410e;
+}
+
+.file-icon-default {
+  background-color: var(--color-neutral-550);
+}
+
 .tab-close {
   display: flex;
   align-items: center;
