@@ -1,6 +1,30 @@
 import { getFileIcon } from "./helpers.js";
 import { getActiveFileId, getFiles, getFolders } from "./state.js";
 
+const DEFAULT_ICON_SRC = "assets/file-icons/file.svg";
+
+function renderUiIcon(iconName, extraClass = "") {
+  if (window.UIIcons && typeof window.UIIcons.render === "function") {
+    return window.UIIcons.render(iconName, extraClass);
+  }
+
+  return `<span class="material-symbols-outlined ui-icon icon-fallback ${extraClass}" aria-hidden="true">help</span>`;
+}
+
+function renderFileIcon(icon, extraClass = "") {
+  return `
+    <span class="file-icon ${extraClass} ${icon.cls}" data-file-icon-class="${icon.cls}">
+      <img
+        class="file-icon-svg"
+        src="${icon.src}"
+        alt="${icon.alt}"
+        draggable="false"
+        onerror="this.onerror=null;this.src='${DEFAULT_ICON_SRC}'"
+      />
+    </span>
+  `;
+}
+
 export function renderTabs(onClose) {
   const tabBar = document.getElementById("tab-bar");
   if (!tabBar) return;
@@ -15,9 +39,11 @@ export function renderTabs(onClose) {
 
     tab.innerHTML = `
       ${file.isDirty ? '<span class="tab-unsaved"></span>' : ""}
-      <span class="file-icon ${icon.cls}">${icon.glyph}</span>
+      ${renderFileIcon(icon)}
       <span class="tab-name">${file.name}</span>
-      <span class="tab-close">&times;</span>
+      <button class="tab-close" type="button" aria-label="Close file">
+        ${renderUiIcon("tab-close")}
+      </button>
     `;
 
     tab.querySelector(".tab-close")?.addEventListener("click", (event) => {
@@ -48,7 +74,8 @@ export function renderSidebar() {
     folderNode.innerHTML = 
     `
       <button class="tree-item tree-folder" data-folder-id="${folder.id}" type="button">
-        <span class="tree-caret">▾</span>
+        ${renderUiIcon("folder-expand", "tree-caret")}
+        ${renderUiIcon("folder", "tree-folder-icon")}
         <span class="tree-item-name">${folder.name}</span>
       </button>
       <div class="tree-children"></div>
@@ -62,7 +89,7 @@ export function renderSidebar() {
         children.innerHTML += 
         `
           <button class="tree-item tree-file${isActive}" data-file-id="${file.id}" type="button">
-            <span class="tree-item-icon file-icon ${icon.cls}">${icon.glyph}</span>
+            ${renderFileIcon(icon, "tree-item-icon")}
             <span class="tree-item-name">${file.name}</span>
           </button>
         `;
@@ -79,7 +106,7 @@ export function renderSidebar() {
     const fileNode = document.createElement('div');
     fileNode.innerHTML += `
       <button class="tree-item tree-file${isActive}" data-file-id="${file.id}" type="button">
-        <span class="tree-item-icon file-icon ${icon.cls}">${icon.glyph}</span>
+        ${renderFileIcon(icon, "tree-item-icon")}
         <span class="tree-item-name">${file.name}</span>
       </button>
     `;

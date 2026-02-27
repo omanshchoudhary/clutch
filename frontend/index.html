@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link rel="stylesheet" href="css/themes.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -26,11 +27,8 @@
 
         <!--Dropdown and Features-->
         <button id="sidebar-toggle" class="sidebar-toggle" title="Toggle Sidebar">Explorer</button>
-        <button id="theme-toggle" class="theme-toggle" title="Switch to Light Mode">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
+        <button id="theme-toggle" class="theme-toggle" title="Switch to Light Mode" aria-label="Switch to Light Mode">
+          <span data-ui-icon="theme-dark" aria-hidden="true"></span>
         </button>
 
         <select id="language">
@@ -55,7 +53,9 @@
 
     <!-- Tabs Bar -->
     <div class="tab-bar" id="tab-bar">
-      <button class="new-file-btn" id="new-file-btn">+</button>
+      <button class="new-file-btn" id="new-file-btn" title="New File" aria-label="New File">
+        <span data-ui-icon="tab-add-file" aria-hidden="true"></span>
+      </button>
     </div>
 
 
@@ -66,21 +66,10 @@
           <span>Explorer</span>
           <div class="sidebar-actions">
             <button id="sidebar-new-file" class="sidebar-action-btn" title="New File" aria-label="New File">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                <polyline points="14 3 14 9 20 9" />
-                <line x1="12" y1="12" x2="12" y2="18" />
-                <line x1="9" y1="15" x2="15" y2="15" />
-              </svg>
+              <span data-ui-icon="sidebar-add-file" aria-hidden="true"></span>
             </button>
             <button id="sidebar-new-folder" class="sidebar-action-btn" title="New Folder" aria-label="New Folder">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <line x1="12" y1="10" x2="12" y2="16" />
-                <line x1="9" y1="13" x2="15" y2="13" />
-              </svg>
+              <span data-ui-icon="sidebar-add-folder" aria-hidden="true"></span>
             </button>
           </div>
         
@@ -133,15 +122,28 @@
 
   <!-- Context Menu -->
   <ul id="context-menu" class="hidden">
-    <li data-action="rename">Rename</li>
-    <li data-action="duplicate">Duplicate</li>
-    <li data-action="close">Close</li>
-    <li data-action="close-others">Close Others</li>
+    <li data-action="rename">
+      <span data-ui-icon="action-rename" data-ui-icon-class="context-action-icon" aria-hidden="true"></span>
+      <span>Rename</span>
+    </li>
+    <li data-action="duplicate">
+      <span data-ui-icon="action-duplicate" data-ui-icon-class="context-action-icon" aria-hidden="true"></span>
+      <span>Duplicate</span>
+    </li>
+    <li data-action="close">
+      <span data-ui-icon="action-close" data-ui-icon-class="context-action-icon" aria-hidden="true"></span>
+      <span>Close</span>
+    </li>
+    <li data-action="close-others">
+      <span data-ui-icon="action-close-others" data-ui-icon-class="context-action-icon" aria-hidden="true"></span>
+      <span>Close Others</span>
+    </li>
   </ul>
 
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="js/ui-icons.js"></script>
   <script src="js/themes.js"></script>
   <script type="module" src="js/files.js"></script>
   <script type="module" src="js/editor.js"></script>

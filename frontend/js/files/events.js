@@ -75,7 +75,10 @@ export function bindTabInteractions(onRefresh, switchToFile) {
   });
 
   menu?.addEventListener("click", (event) => {
-    const action = event.target.dataset.action;
+    const actionItem = event.target.closest("[data-action]");
+    if (!actionItem || !menu.contains(actionItem)) return;
+
+    const action = actionItem.dataset.action;
     if (!action) return;
 
     if (action === "rename" && contextFileId) {
