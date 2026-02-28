@@ -7,6 +7,7 @@ import {
   getFiles,
   renameFile,
   setActiveFileId,
+  toggleFolderCollapsed
 } from "./state.js";
 
 export function bindTabInteractions(onRefresh, switchToFile) {
@@ -92,11 +93,11 @@ export function bindTabInteractions(onRefresh, switchToFile) {
       duplicateFile(contextFileId);
     }
 
-    if (action === "close" && contextFileId) {
+    if (action === "delete" && contextFileId) {
       deleteFile(contextFileId);
     }
 
-    if (action === "close-others" && contextFileId) {
+    if (action === "delete-others" && contextFileId) {
       closeOthers(contextFileId);
       setActiveFileId(contextFileId);
     }
@@ -110,38 +111,71 @@ export function bindTabInteractions(onRefresh, switchToFile) {
   });
 }
 
-export function bindSidebarInteractions(switchToFile) {
+export function bindSidebarInteractions(onRefresh, switchToFile) {
   const fileTree = document.getElementById("sidebar-tree");
-  fileTree?.addEventListener("click", (event) => {
-    const row = event.target.closest(".tree-file");
-    if (!row) return;
-    const fileId = row.dataset.fileId;
-    if (!fileId) return;
-    switchToFile(fileId);
+
+  document.getElementById("sidebar-new-file")?.addEventListener("click", () => {
+    const name = prompt("Enter your file name:");
+    const created = createFile(name, null);
+    switchToFile(created.id);
   });
+
+  document.getElementById("sidebar-new-folder")?.addEventListener("click", () => {
+    const name = prompt("Enter your folder name:");
+    createFolder(name, null);
+    onRefresh();
+  });
+
+  fileTree?.addEventListener("click", (event) => {
+    const actionButton = event.target.closest("[data-folder-action]");
+    if (actionButton) {
+      const action = actionButton.dataset.folderAction;
+      const folderId = actionButton.dataset.folderId;
+      if (!action || !folderId) return;
+
+      if (action === "add-file") {
+        const name = prompt("Enter your file name:");
+        const created = createFile(name, folderId);
+        switchToFile(created.id);
+        return;
+      }
+
+      if (action === "add-folder") {
+        const name = prompt("Enter your folder name:");
+        createFolder(name, folderId);
+        onRefresh();
+      }
+      return;
+    }
+
+    const folderRow = event.target.closest(".tree-folder");
+    if (folderRow) {
+      const folderId = folderRow.dataset.folderId;
+      if (!folderId) return;
+      toggleFolderCollapsed(folderId);
+      onRefresh();
+      return;
+    }
+
+    const fileRow = event.target.closest(".tree-file");
+    if (fileRow) {
+      const fileId = fileRow.dataset.fileId;
+      if (!fileId) return;
+      switchToFile(fileId);
+      return;
+    }
+  });
+
 }
 
 export function bindTopActions(onRefresh, onExport, switchToFile) {
   document.getElementById("new-file-btn")?.addEventListener("click", () => {
-    const name = prompt("Enter your name:");
-    const created = createFile(name);
+    const name = prompt("Enter your file name:");
+    const created = createFile(name, null);
     switchToFile(created.id);
   });
 
   document.getElementById("export-button")?.addEventListener("click", () => {
     onExport();
   });
-}
-
-export function bindSideBarActions(switchToFile){
-  document.getElementById("sidebar-new-file")?.addEventListener("click",()=>{
-    const name = prompt("Enter your name:");
-    const created = createFile(name);
-    switchToFile(created.id);
-  })
-
-  document.getElementById("sidebar-new-folder")?.addEventListener("click",()=>{
-    const name = prompt("Enter your folder name:");
-    const created = createFolder(name);
-  })
 }

@@ -6,6 +6,8 @@
     "tab-close": { glyph: "close", className: "icon-close" },
     "sidebar-add-file": { glyph: "note_add", className: "icon-add-file" },
     "sidebar-add-folder": { glyph: "create_new_folder", className: "icon-add-folder" },
+    "folder-add-file": { glyph: "note_add", className: "icon-folder-add-file" },
+    "folder-add-folder": { glyph: "create_new_folder", className: "icon-folder-add-folder" },
     folder: { glyph: "folder", className: "icon-folder" },
     "folder-expand": { glyph: "expand_more", className: "icon-folder-expand" },
     "folder-collapse": { glyph: "chevron_right", className: "icon-folder-collapse" },
@@ -13,7 +15,7 @@
     "action-delete": { glyph: "delete", className: "icon-delete" },
     "action-duplicate": { glyph: "content_copy", className: "icon-duplicate" },
     "action-close": { glyph: "close", className: "icon-close" },
-    "action-close-others": { glyph: "tab_close_right", className: "icon-close-others" },
+    "action-delete-others": { glyph: "delete_sweep", className: "icon-delete-others" },
     fallback: { glyph: "help", className: "icon-fallback" },
   });
 

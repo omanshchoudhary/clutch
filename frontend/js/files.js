@@ -1,5 +1,5 @@
 import { saveSession } from "./storage.js";
-import { bindSideBarActions, bindSidebarInteractions, bindTabInteractions, bindTopActions } from "./files/events.js";
+import { bindSidebarInteractions, bindTabInteractions, bindTopActions } from "./files/events.js";
 import { exportFiles as exportAllFiles } from "./files/exporter.js";
 import { deleteFile, getActiveFile, getActiveFileId, getFiles, getFolders, persistSession, setActiveFileId } from "./files/state.js";
 import { renderSidebar, renderTabs } from "./files/render.js";
@@ -58,8 +58,14 @@ bindTabInteractions(
   switchToFile,
 );
 
-bindSidebarInteractions(switchToFile);
-bindSideBarActions(switchToFile);
+bindSidebarInteractions(
+  () =>{
+    refreshViews();
+    persistSession();
+  },
+  switchToFile
+);
+
 refreshViews();
 
 setInterval(() => {

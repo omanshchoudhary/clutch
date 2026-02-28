@@ -50,7 +50,6 @@ export async function executeCode(language, code, input) {
         errorMessage += ": " + errorResult.details.join(", ");
       }
     } catch (e) {
-      // fallback to generic message
     }
     throw new Error(errorMessage);
   }

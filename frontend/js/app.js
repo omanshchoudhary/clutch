@@ -113,6 +113,7 @@ document.getElementById("clear-session").addEventListener("click", () => {
     window.__skipSessionSave = true;
     localStorage.removeItem("files");
     localStorage.removeItem("activeFileId");
+    localStorage.removeItem("folders")
     location.reload();
   }
 });

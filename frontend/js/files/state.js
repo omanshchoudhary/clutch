@@ -1,6 +1,8 @@
 import { loadSession, saveSession } from "../storage.js";
 import { createFileObject, getLanguageFromExtension, createFolderObject } from "./helpers.js";
 
+
+// Initial Setup 
 const defaultCode = `#include <iostream>
 using namespace std;
 
@@ -36,7 +38,7 @@ export function getActiveFile() {
   return files.find((file) => file.id === activeFileId);
 }
 
-export function createFile(name = "Untitiled.cpp") {
+export function createFile(name = "Untitiled.cpp", folderId = null) {
   let nextName = name;
   if (!nextName || !nextName.trim()) {
     nextName = "Untitiled.cpp";
@@ -46,7 +48,7 @@ export function createFile(name = "Untitiled.cpp") {
     nextName = "Untitled-" + files.length + "." + nextName.split(".").pop();
   }
 
-  const file = createFileObject(nextName);
+  const file = createFileObject(nextName, null, "", folderId);
   files.push(file);
   return file;
 }
@@ -159,14 +161,34 @@ export function setFileFolder(fileId, folderId){
     }
   })
 }
-export function createFolder(name = "New Folder") {
+export function createFolder(name = "New Folder", parentId = null) {
   let nextName = name;
-
-  if (folders.some((folder) => folder.name === nextName)) {
-    nextName = "New Folder-" + folders.length + "." + nextName.split(".").pop();
+  if (!nextName || !nextName.trim()) {
+    nextName = "New Folder";
   }
 
-  const folder = createFolderObject(nextName);
+  if (folders.some((folder) => folder.name === nextName && folder.parentId === parentId)) {
+    nextName = `${nextName}-${folders.length}`;
+  }
+
+  const folder = createFolderObject(nextName, parentId);
   folders.push(folder);
   return folder;
+}
+
+
+// Collapsed Folders
+
+export const collapsedFolderIds = new Set();
+
+export function toggleFolderCollapsed(folderId) {
+  if (collapsedFolderIds.has(folderId)) {
+    collapsedFolderIds.delete(folderId);
+  } else {
+    collapsedFolderIds.add(folderId);
+  }
+}
+
+export function isFolderCollapsed(folderId){
+  return collapsedFolderIds.has(folderId);
 }

@@ -190,6 +190,30 @@ body::before {
   margin-top: 1px;
 }
 
+.tree-folder-row {
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.tree-folder-toggle {
+  min-width: 0;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tree-folder-toggle:focus-visible {
+  outline: none;
+}
+
 .tree-item-icon,
 .tree-caret,
 .tree-folder-icon {
@@ -208,6 +232,59 @@ body::before {
 
 .tree-folder-icon {
   color: var(--color-amber-400);
+}
+
+.tree-children {
+  margin-left: 14px;
+}
+
+.tree-folder-node.is-collapsed .tree-children {
+  display: none;
+}
+
+.tree-folder-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.tree-folder-row:hover .tree-folder-actions,
+.tree-folder-row:focus-within .tree-folder-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tree-folder-action {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.tree-folder-action:hover {
+  background-color: var(--color-neutral-780);
+  border-color: var(--color-neutral-700);
+}
+
+.tree-folder-action:focus-visible {
+  outline: none;
+  border-color: var(--color-blue-500);
+  box-shadow: 0 0 0 2px var(--overlay-blue-30);
+}
+
+.tree-folder-action-icon.ui-icon {
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
 }
 
 .tree-item:hover {
