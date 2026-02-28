@@ -76,6 +76,10 @@ refreshViews();
 
 setInterval(() => {
   if (window.__skipSessionSave) return;
+  const activeFile = getActiveFile();
+  if (activeFile && window.Editor) {
+    activeFile.content = window.Editor.getCode();
+  }
   saveSession(getFiles(), getActiveFileId(), getFolders());
 }, 5000);
 
