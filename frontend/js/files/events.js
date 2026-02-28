@@ -1,15 +1,29 @@
 import {
-  closeOthers,
   createFile,
   createFolder,
   deleteFile,
-  duplicateFile,
   getFiles,
+  renameFolder,
   renameFile,
-  setActiveFileId,
-  toggleFolderCollapsed
+  toggleFolderCollapsed,
+  deleteFolder
 } from "./state.js";
 
+let contextSource = null;
+
+function showContextMenu(menu, x, y) {
+  if (!menu) return;
+  menu.style.left = x + "px";
+  menu.style.top = y + "px";
+  menu.classList.remove("hidden");
+}
+
+function hideContextMenu(menu) {
+  if (!menu) return;
+  menu.classList.add("hidden");
+}
+
+// Tab Events
 export function bindTabInteractions(onRefresh, switchToFile) {
   const tabBar = document.getElementById("tab-bar");
   const menu = document.getElementById("context-menu");
@@ -23,20 +37,15 @@ export function bindTabInteractions(onRefresh, switchToFile) {
     return file?.id || null;
   }
 
-  function showContextMenu(x, y) {
-    if (!menu) return;
-    menu.style.left = x + "px";
-    menu.style.top = y + "px";
-    menu.classList.remove("hidden");
-  }
 
   tabBar?.addEventListener("contextmenu", (event) => {
     const tab = event.target.closest(".tab");
     if (!tab) return;
 
     event.preventDefault();
+    contextSource = "tab";
     contextFileId = findFileIdByTab(tab);
-    showContextMenu(event.pageX, event.pageY);
+    showContextMenu(menu, event.pageX, event.pageY);
   });
 
   tabBar?.addEventListener("click", (event) => {
@@ -78,6 +87,7 @@ export function bindTabInteractions(onRefresh, switchToFile) {
   menu?.addEventListener("click", (event) => {
     const actionItem = event.target.closest("[data-action]");
     if (!actionItem || !menu.contains(actionItem)) return;
+    if (contextSource !== "tab") return;
 
     const action = actionItem.dataset.action;
     if (!action) return;
@@ -89,30 +99,28 @@ export function bindTabInteractions(onRefresh, switchToFile) {
       }
     }
 
-    if (action === "duplicate" && contextFileId) {
-      duplicateFile(contextFileId);
-    }
-
     if (action === "delete" && contextFileId) {
       deleteFile(contextFileId);
     }
 
-    if (action === "delete-others" && contextFileId) {
-      closeOthers(contextFileId);
-      setActiveFileId(contextFileId);
-    }
-
-    menu.classList.add("hidden");
+    hideContextMenu(menu);
+    contextFileId = null;
+    contextSource = null;
     onRefresh();
   });
 
   document.addEventListener("click", () => {
-    menu?.classList.add("hidden");
+    hideContextMenu(menu);
+    contextSource = null;
   });
 }
 
+// SideBar Events
+
 export function bindSidebarInteractions(onRefresh, switchToFile) {
   const fileTree = document.getElementById("sidebar-tree");
+  const menu = document.getElementById("context-menu");
+  let contextTarget = null;
 
   document.getElementById("sidebar-new-file")?.addEventListener("click", () => {
     const name = prompt("Enter your file name:");
@@ -120,11 +128,13 @@ export function bindSidebarInteractions(onRefresh, switchToFile) {
     switchToFile(created.id);
   });
 
-  document.getElementById("sidebar-new-folder")?.addEventListener("click", () => {
-    const name = prompt("Enter your folder name:");
-    createFolder(name, null);
-    onRefresh();
-  });
+  document
+    .getElementById("sidebar-new-folder")
+    ?.addEventListener("click", () => {
+      const name = prompt("Enter your folder name:");
+      createFolder(name, null);
+      onRefresh();
+    });
 
   fileTree?.addEventListener("click", (event) => {
     const actionButton = event.target.closest("[data-folder-action]");
@@ -166,6 +176,61 @@ export function bindSidebarInteractions(onRefresh, switchToFile) {
     }
   });
 
+  fileTree?.addEventListener("contextmenu", (event) => {
+    const fileRow = event.target.closest(".tree-file");
+    const folderRow = event.target.closest(".tree-folder");
+
+    if (!fileRow && !folderRow) return;
+    event.preventDefault();
+    contextSource = "sidebar";
+
+    if (fileRow) {
+      const fileId = fileRow.dataset.fileId;
+      if (!fileId) return;
+      contextTarget = { type: "file", id: fileId };
+    } else {
+      const folderId = folderRow.dataset.folderId;
+      if (!folderId) return;
+      contextTarget = { type: "folder", id: folderId };
+    }
+    showContextMenu(menu, event.pageX, event.pageY);
+  });
+
+
+  menu?.addEventListener("click", (event) => {
+    const actionItem = event.target.closest("[data-action]");
+    if (!actionItem || !menu.contains(actionItem) || !contextTarget) return;
+    if (contextSource !== "sidebar") return;
+
+    const action = actionItem.dataset.action;
+    if (!action) return;
+
+    if (action === "rename") {
+      const newName = prompt(
+        contextTarget.type === "folder" ? "Enter new folder name:" : "Enter new file name:"
+      );
+      if (newName && newName.trim()) {
+        if (contextTarget.type === "folder") {
+          renameFolder(contextTarget.id, newName.trim());
+        } else {
+          renameFile(contextTarget.id, newName.trim());
+        }
+      }
+    }
+
+    if (action === "delete") {
+      if (contextTarget.type === "folder") {
+        deleteFolder(contextTarget.id);
+      } else {
+        deleteFile(contextTarget.id);
+      }
+    }
+
+    hideContextMenu(menu);
+    contextTarget = null;
+    contextSource = null;
+    onRefresh();
+  });
 }
 
 export function bindTopActions(onRefresh, onExport, switchToFile) {

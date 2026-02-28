@@ -13,7 +13,6 @@
     "folder-collapse": { glyph: "chevron_right", className: "icon-folder-collapse" },
     "action-rename": { glyph: "edit", className: "icon-rename" },
     "action-delete": { glyph: "delete", className: "icon-delete" },
-    "action-duplicate": { glyph: "content_copy", className: "icon-duplicate" },
     "action-close": { glyph: "close", className: "icon-close" },
     "action-delete-others": { glyph: "delete_sweep", className: "icon-delete-others" },
     fallback: { glyph: "help", className: "icon-fallback" },
