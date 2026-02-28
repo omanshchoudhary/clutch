@@ -1,5 +1,3 @@
-const input = document.getElementById("input");
-
 // Saving Files In Local Storage With Active File Id
 export function saveSession(files, activeFileId, folders) {
   try {
