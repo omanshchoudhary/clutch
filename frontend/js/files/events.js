@@ -6,7 +6,7 @@ import {
   renameFolder,
   renameFile,
   toggleFolderCollapsed,
-  deleteFolder
+  deleteFolder,
 } from "./state.js";
 
 let contextSource = null;
@@ -32,11 +32,8 @@ export function bindTabInteractions(onRefresh, switchToFile) {
   const clickDelayMs = 250;
 
   function findFileIdByTab(tab) {
-    const tabName = tab.querySelector(".tab-name")?.textContent;
-    const file = getFiles().find((item) => item.name === tabName);
-    return file?.id || null;
+    return tab.dataset.fileId || null;
   }
-
 
   tabBar?.addEventListener("contextmenu", (event) => {
     const tab = event.target.closest(".tab");
@@ -196,7 +193,6 @@ export function bindSidebarInteractions(onRefresh, switchToFile) {
     showContextMenu(menu, event.pageX, event.pageY);
   });
 
-
   menu?.addEventListener("click", (event) => {
     const actionItem = event.target.closest("[data-action]");
     if (!actionItem || !menu.contains(actionItem) || !contextTarget) return;
@@ -207,7 +203,9 @@ export function bindSidebarInteractions(onRefresh, switchToFile) {
 
     if (action === "rename") {
       const newName = prompt(
-        contextTarget.type === "folder" ? "Enter new folder name:" : "Enter new file name:"
+        contextTarget.type === "folder"
+          ? "Enter new folder name:"
+          : "Enter new file name:",
       );
       if (newName && newName.trim()) {
         if (contextTarget.type === "folder") {

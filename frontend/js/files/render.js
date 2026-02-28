@@ -9,6 +9,12 @@ import {
 const DEFAULT_ICON_SRC = "assets/file-icons/file.svg";
 const ROOT_PARENT_ID = "__root__";
 
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderUiIcon(iconName, extraClass = "") {
   if (window.UIIcons && typeof window.UIIcons.render === "function") {
     return window.UIIcons.render(iconName, extraClass);
@@ -40,7 +46,7 @@ function createFileRowButton(file) {
   button.type = "button";
   button.innerHTML = `
     ${renderFileIcon(icon, "tree-item-icon")}
-    <span class="tree-item-name">${file.name}</span>
+    <span class="tree-item-name">${escapeHtml(file.name)}</span>
   `;
   return button;
 }
@@ -78,7 +84,7 @@ function createFolderNode(folder, foldersByParentId, filesByFolderId) {
       <button class="tree-folder tree-folder-toggle" data-folder-id="${folder.id}" type="button" aria-expanded="${!isCollapsed}">
         ${renderUiIcon(isCollapsed ? "folder-collapse" : "folder-expand", "tree-caret")}
         ${renderUiIcon("folder", "tree-folder-icon")}
-        <span class="tree-item-name">${folder.name}</span>
+        <span class="tree-item-name">${escapeHtml(folder.name)}</span>
       </button>
       <div class="tree-folder-actions">
         <button
@@ -111,7 +117,9 @@ function createFolderNode(folder, foldersByParentId, filesByFolderId) {
 
   const childFolders = foldersByParentId.get(folder.id) || [];
   childFolders.forEach((childFolder) => {
-    children.appendChild(createFolderNode(childFolder, foldersByParentId, filesByFolderId));
+    children.appendChild(
+      createFolderNode(childFolder, foldersByParentId, filesByFolderId),
+    );
   });
 
   const childFiles = filesByFolderId.get(folder.id) || [];
@@ -132,12 +140,13 @@ export function renderTabs(onClose) {
   getFiles().forEach((file) => {
     const tab = document.createElement("div");
     tab.className = `tab tab-item ${file.id === getActiveFileId() ? "active" : ""}`;
+    tab.dataset.fileId = file.id;
     const icon = getFileIcon(file.name);
 
     tab.innerHTML = `
       ${file.isDirty ? '<span class="tab-unsaved"></span>' : ""}
       ${renderFileIcon(icon)}
-      <span class="tab-name">${file.name}</span>
+      <span class="tab-name">${escapeHtml(file.name)}</span>
       <button class="tab-close" type="button" aria-label="Close file">
         ${renderUiIcon("tab-close")}
       </button>
@@ -169,7 +178,9 @@ export function renderSidebar() {
 
   const rootFolders = foldersByParentId.get(ROOT_PARENT_ID) || [];
   rootFolders.forEach((rootFolder) => {
-    fileTree.appendChild(createFolderNode(rootFolder, foldersByParentId, filesByFolderId));
+    fileTree.appendChild(
+      createFolderNode(rootFolder, foldersByParentId, filesByFolderId),
+    );
   });
 
   const rootFiles = filesByFolderId.get(ROOT_PARENT_ID) || [];

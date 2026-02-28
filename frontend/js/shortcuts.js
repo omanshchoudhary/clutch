@@ -1,81 +1,44 @@
 import { saveSession } from "./storage.js";
-import { executeCode } from "./api.js";
+import { getFiles, getActiveFileId, getFolders } from "./files/state.js";
 
 const input = document.getElementById("input");
-const output = document.getElementById("output")
-const runButton = document.getElementById("run-button")
+const output = document.getElementById("output");
+const runButton = document.getElementById("run-button");
 
-function isMac(){ 
-    return navigator.platform.toUpperCase().indexOf("MAC") >=0;
+function isMac() {
+  return navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 }
 
-function getModifierKey(){
-    return isMac() ? "Cmd" : "Ctrl";
+function getModifierKey() {
+  return isMac() ? "Cmd" : "Ctrl";
 }
 
-async function runCode() {
-    const code = window.Editor.getCode();
-    const language=document.getElementById("language").value;
-    output.textContent="Running..."
+document.addEventListener("keydown", (event) => {
+  const mod = event.ctrlKey || event.metaKey;
 
-    if(!code.trim()){
-        output.textContent="Warning: No code to execute"
-        return;
-    }
-    runButton.disabled=true;
-    runButton.textContent="Running..."
-    output.textContent="Running..."
+  if (mod && event.key === "Enter") {
+    event.preventDefault();
+    runButton.click();
+  }
 
-    try{
-        const result = await executeCode(language, code,input.value)
-        output.textContent=result || "No Output";
-    } catch(err){
-        output.textContent=`Error: ${err.message}`
-    } finally {
-        runButton.disabled=false;
-        runButton.textContent="Run"
-    }
-}
+  if (mod && event.key === "s") {
+    event.preventDefault();
+    saveSession(getFiles(), getActiveFileId(), getFolders());
+  }
 
-function clearOutput(){
-    output.textContent="";
-    input.focus()
-}
+  if (mod && event.key === "l") {
+    event.preventDefault();
+    output.textContent = "";
+  }
 
-function focusEditor(){
-    window.Editor.focus();
-}
+  if (event.key === "Escape") {
+    document.getElementById("editor")?.focus();
+  }
+});
 
+document.addEventListener("DOMContentLoaded", () => {
+  const mod = getModifierKey();
 
-
-document.addEventListener("keydown", async (event) => {
-    const mod = event.ctrlKey || event.metaKey;
-    const shift = event.shiftKey;
-
-    if(mod && event.key==="Enter"){
-        event.preventDefault();
-        await runCode()
-    }
-
-    if(mod && event.key==="s"){
-        event.preventDefault();
-        saveSession();
-    }
-
-    if(mod && event.key==="l"){
-        event.preventDefault();
-        clearOutput();
-    }
-
-    if(event.key==="Escape"){
-        focusEditor();
-    }
-
-})
-
-document.addEventListener("DOMContentLoaded", ()=>{
-    const mod = getModifierKey();
-
-    runButton.title=`Run code (${mod} + Enter)`
-    input.title=`Input (${mod} + S to save)`
-})
+  runButton.title = `Run code (${mod} + Enter)`;
+  input.title = `Input (${mod} + S to save)`;
+});

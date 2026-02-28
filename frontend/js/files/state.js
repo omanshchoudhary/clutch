@@ -1,8 +1,11 @@
 import { loadSession, saveSession } from "../storage.js";
-import { createFileObject, getLanguageFromExtension, createFolderObject } from "./helpers.js";
+import {
+  createFileObject,
+  getLanguageFromExtension,
+  createFolderObject,
+} from "./helpers.js";
 
-
-// Initial Setup 
+// Initial Setup
 const defaultCode = `#include <iostream>
 using namespace std;
 
@@ -14,7 +17,10 @@ int main() {
 const defaultFile = createFileObject("main.cpp", "cpp", defaultCode);
 const session = loadSession();
 
-let files = Array.isArray(session?.files) && session.files.length > 0 ? session.files : [defaultFile];
+let files =
+  Array.isArray(session?.files) && session.files.length > 0
+    ? session.files
+    : [defaultFile];
 files = migrateFiles(files);
 let activeFileId = session?.activeFileId || files[0].id;
 
@@ -38,10 +44,10 @@ export function getActiveFile() {
   return files.find((file) => file.id === activeFileId);
 }
 
-export function createFile(name = "Untitiled.cpp", folderId = null) {
+export function createFile(name = "Untitled.cpp", folderId = null) {
   let nextName = name;
   if (!nextName || !nextName.trim()) {
-    nextName = "Untitiled.cpp";
+    nextName = "Untitled.cpp";
   }
 
   if (files.some((file) => file.name === nextName)) {
@@ -86,7 +92,11 @@ export function duplicateFile(id) {
   const original = files.find((file) => file.id === id);
   if (!original) return null;
 
-  const copy = createFileObject("Copy of " + original.name, original.language, original.content);
+  const copy = createFileObject(
+    "Copy of " + original.name,
+    original.language,
+    original.content,
+  );
   files.push(copy);
   activeFileId = copy.id;
   return copy;
@@ -97,36 +107,33 @@ export function closeOthers(keepId) {
   activeFileId = keepId;
 }
 
-
 // Sanitizing Files Data
-function migrateFiles(files){
-  if(!Array.isArray(files)) return [];
+function migrateFiles(files) {
+  if (!Array.isArray(files)) return [];
 
-  return files.map(file =>({
+  return files.map((file) => ({
     ...file,
-    folderId: file.folderId ?? null
-  }))
+    folderId: file.folderId ?? null,
+  }));
 }
 
 // Folders
 
-let folders = session?.folders || []
-folders= migrateFolders(folders)
-
+let folders = session?.folders || [];
+folders = migrateFolders(folders);
 
 // Sanitizing Folders Data
-function migrateFolders(folders){
-  if(!Array.isArray(folders)) return [];
+function migrateFolders(folders) {
+  if (!Array.isArray(folders)) return [];
 
-  return folders.map(folder =>({
+  return folders.map((folder) => ({
     ...folder,
-    parentId: folder.parentId ?? null
-  }))
+    parentId: folder.parentId ?? null,
+  }));
 }
 
-
-export function getFolders(){
-  return folders
+export function getFolders() {
+  return folders;
 }
 
 export function renameFolder(id, newName) {
@@ -140,26 +147,37 @@ export function renameFolder(id, newName) {
 }
 
 export function deleteFolder(id) {
+  // Collect all descendant folder IDs
+  const idsToDelete = [id];
+  const queue = [id];
+  while (queue.length > 0) {
+    const parentId = queue.shift();
+    folders.forEach((folder) => {
+      if (folder.parentId === parentId && !idsToDelete.includes(folder.id)) {
+        idsToDelete.push(folder.id);
+        queue.push(folder.id);
+      }
+    });
+  }
 
-  files=files.map(file => {
-    if(file.folderId !== id) return file;
-    return {
-      ...file,
-      folderId: null
-    }
-  })
+  // Move files from all deleted folders to root
+  const deleteSet = new Set(idsToDelete);
+  files = files.map((file) => {
+    if (!deleteSet.has(file.folderId)) return file;
+    return { ...file, folderId: null };
+  });
 
-  folders = folders.filter((folder) => folder.id !== id);
+  folders = folders.filter((folder) => !deleteSet.has(folder.id));
 }
 
-export function setFileFolder(fileId, folderId){
-  files=files.map(file =>{
-    if(file.id !== fileId) return file;
+export function setFileFolder(fileId, folderId) {
+  files = files.map((file) => {
+    if (file.id !== fileId) return file;
     return {
       ...file,
-      folderId
-    }
-  })
+      folderId,
+    };
+  });
 }
 export function createFolder(name = "New Folder", parentId = null) {
   let nextName = name;
@@ -167,7 +185,11 @@ export function createFolder(name = "New Folder", parentId = null) {
     nextName = "New Folder";
   }
 
-  if (folders.some((folder) => folder.name === nextName && folder.parentId === parentId)) {
+  if (
+    folders.some(
+      (folder) => folder.name === nextName && folder.parentId === parentId,
+    )
+  ) {
     nextName = `${nextName}-${folders.length}`;
   }
 
@@ -175,7 +197,6 @@ export function createFolder(name = "New Folder", parentId = null) {
   folders.push(folder);
   return folder;
 }
-
 
 // Collapsed Folders
 
@@ -189,6 +210,6 @@ export function toggleFolderCollapsed(folderId) {
   }
 }
 
-export function isFolderCollapsed(folderId){
+export function isFolderCollapsed(folderId) {
   return collapsedFolderIds.has(folderId);
 }
