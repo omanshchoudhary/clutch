@@ -24,7 +24,12 @@ export async function exportFiles() {
 
   const activeFile = getActiveFile();
   if (activeFile && window.Editor) {
-    activeFile.content = window.Editor.getCode();
+    const currentContent = window.Editor.getCode();
+    getFiles().forEach((file) => {
+      if (file.id === activeFile.id) {
+        file.content = currentContent;
+      }
+    });
   }
 
   try {
