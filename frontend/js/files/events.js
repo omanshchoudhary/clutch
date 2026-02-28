@@ -13,9 +13,14 @@ let contextSource = null;
 
 function showContextMenu(menu, x, y) {
   if (!menu) return;
-  menu.style.left = x + "px";
-  menu.style.top = y + "px";
+  menu.style.left = "0px";
+  menu.style.top = "0px";
   menu.classList.remove("hidden");
+  const rect = menu.getBoundingClientRect();
+  const clampedX = Math.min(x, window.innerWidth - rect.width - 4);
+  const clampedY = Math.min(y, window.innerHeight - rect.height - 4);
+  menu.style.left = Math.max(0, clampedX) + "px";
+  menu.style.top = Math.max(0, clampedY) + "px";
 }
 
 function hideContextMenu(menu) {
