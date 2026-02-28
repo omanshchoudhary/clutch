@@ -1,5 +1,6 @@
 //Imports
 import { executeCode } from "./api.js";
+import { clearSession } from "./storage.js";
 
 //DOM Elements
 const input = document.getElementById("input");
@@ -111,9 +112,7 @@ document.getElementById("clear-output").addEventListener("click", () => {
 document.getElementById("clear-session").addEventListener("click", () => {
   if (confirm("Clear all files and reset? This cannot be undone.")) {
     window.__skipSessionSave = true;
-    localStorage.removeItem("files");
-    localStorage.removeItem("activeFileId");
-    localStorage.removeItem("folders")
+    clearSession();
     location.reload();
   }
 });
