@@ -3,6 +3,7 @@ import {
   createFileObject,
   getLanguageFromExtension,
   createFolderObject,
+  sanitizeName,
 } from "./helpers.js";
 
 // Initial Setup
@@ -45,10 +46,8 @@ export function getActiveFile() {
 }
 
 export function createFile(name = "Untitled.cpp", folderId = null) {
-  let nextName = name;
-  if (!nextName || !nextName.trim()) {
-    nextName = "Untitled.cpp";
-  }
+  let nextName = sanitizeName(name || "Untitled.cpp");
+  if (!nextName.includes(".")) nextName += ".cpp";
 
   if (files.some((file) => file.name === nextName)) {
     nextName = "Untitled-" + files.length + "." + nextName.split(".").pop();
@@ -74,12 +73,13 @@ export function deleteFile(id) {
 }
 
 export function renameFile(id, newName) {
+  const safeName = sanitizeName(newName);
   files = files.map((file) => {
     if (file.id !== id) return file;
     return {
       ...file,
-      name: newName,
-      language: getLanguageFromExtension(newName),
+      name: safeName,
+      language: getLanguageFromExtension(safeName),
     };
   });
 }
@@ -137,11 +137,12 @@ export function getFolders() {
 }
 
 export function renameFolder(id, newName) {
+  const safeName = sanitizeName(newName);
   folders = folders.map((folder) => {
     if (folder.id !== id) return folder;
     return {
       ...folder,
-      name: newName,
+      name: safeName,
     };
   });
 }
@@ -180,10 +181,7 @@ export function setFileFolder(fileId, folderId) {
   });
 }
 export function createFolder(name = "New Folder", parentId = null) {
-  let nextName = name;
-  if (!nextName || !nextName.trim()) {
-    nextName = "New Folder";
-  }
+  let nextName = sanitizeName(name || "New Folder");
 
   if (
     folders.some(
